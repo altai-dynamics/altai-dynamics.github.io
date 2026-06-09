@@ -246,14 +246,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   .hero,.sec,.cta-sec{padding-left:20px;padding-right:20px}
   hr.dv{margin:0 20px}
   .tech-strip{padding:14px 20px}
-  .story-grid{grid-template-columns:1fr;gap:24px}
-  .story-vis{position:static}
+  .story-grid{grid-template-columns:1fr;gap:0}
+  .story-vis{display:none}
+  .mob-vis-inline{display:none}
+  .s-step.active .mob-vis-inline{display:block}
   .feat-grid{grid-template-columns:1fr 1fr}
   .fw-grid{grid-template-columns:1fr 1fr}
   .pricing-grid{grid-template-columns:1fr}
   footer{padding:28px 20px}
   .ft-top{flex-direction:column}
   .ft-bot{flex-direction:column;text-align:center}
+  .hero-stats{width:100%}
 }
 @media(max-width:600px){
   .hero-stats{flex-direction:column}
@@ -396,6 +399,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
               <div class="s-desc" data-i18n="sd3">Высокая уверенность — мгновенно. Неуверен — просит подтверждение менеджера. Остатки в реальном времени.</div>
             </div>
           </div>
+          <div class="mob-vis-inline">
+            <div style="background:rgba(0,245,196,0.03);border:1px solid rgba(0,245,196,0.15);border-radius:10px;padding:14px;margin-top:12px">
+              <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.1);color:#4ade80;font-family:'Space Mono',monospace;font-size:0.58rem;padding:3px 9px;border-radius:100px;margin-bottom:10px">✓ Приход материала</div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-family:'Space Mono',monospace;font-size:0.57rem;color:var(--muted)">МАТЕРИАЛ</span><span style="font-size:0.78rem;font-weight:600">Цемент М400</span></div>
+              <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--accent);margin-top:6px">+500 кг</div>
+            </div>
+          </div>
         </div>
         <div class="s-step" data-step="3">
           <div class="s-step-hdr">
@@ -404,6 +414,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
               <div class="s-icon">🔔</div>
               <div class="s-title" data-i18n="st4">Telegram и дашборд</div>
               <div class="s-desc" data-i18n="sd4">Менеджер получает уведомление в Telegram. Дашборд: остатки, план/факт, алерты о критических запасах.</div>
+            </div>
+          </div>
+          <div class="mob-vis-inline">
+            <div style="background:#1a2535;border:1px solid rgba(0,136,204,0.2);border-radius:10px;padding:12px;display:flex;gap:10px;margin-top:12px">
+              <div style="width:30px;height:30px;border-radius:50%;background:rgba(0,136,204,0.12);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0">✈️</div>
+              <div><div style="font-family:'Space Mono',monospace;font-size:0.57rem;color:#4fc3f7;margin-bottom:3px">AD Pulse Alerts</div><div style="font-size:0.75rem;color:var(--text)">✅ Приход · Цемент М400 · 500 кг</div></div>
             </div>
           </div>
         </div>
@@ -751,7 +767,7 @@ function go(i){
   visuals.forEach((v,j)=>v.classList.toggle('active',j===i));
 }
 steps.forEach((s,i)=>s.addEventListener('click',()=>{clearInterval(autoT);go(i);startAuto();}));
-function startAuto(){autoT=setInterval(()=>go((cur+1)%steps.length),3800);}
+function startAuto(){autoT=setInterval(()=>go((cur+1)%steps.length),6500);}
 startAuto();
 
 // Scroll drive
