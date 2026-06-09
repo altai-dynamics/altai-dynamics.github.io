@@ -1,1224 +1,927 @@
 <!DOCTYPE html>
-<html lang="ru" id="html-root">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AD Pulse — CRM и управление складом для производственного бизнеса</title>
-<meta name="description" content="AD Pulse — B2B платформа для производственных компаний Казахстана. WhatsApp CRM, управление складом, аналитика продаж, интеграция с 1С. Запуск за 3 минуты.">
-<meta name="keywords" content="CRM Казахстан, WhatsApp CRM, управление складом, B2B платформа, Altai Dynamics, AD Pulse">
-<meta name="author" content="Altai Dynamics">
-<meta property="og:title" content="AD Pulse — Управляй бизнесом умнее">
-<meta property="og:description" content="B2B платформа для производственных компаний. WhatsApp CRM, склад, аналитика и 10+ интеграций в одном окне. Резидент Astana Hub.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://winketic.github.io">
-<meta property="og:image" content="https://winketic.github.io/og-image.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AD Pulse — Управляй бизнесом умнее">
-<meta name="twitter:description" content="B2B платформа для производственных компаний Казахстана.">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/svg+xml" href="logo.svg">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="AD Pulse — автоматический учёт материалов через WhatsApp для заводов, цехов и складов"/>
+<title>AD Pulse — Учёт материалов через WhatsApp</title>
+<link rel="icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-button{background:none;border:none;padding:0;font:inherit;color:inherit}
 :root{
-  --c1:#05050a;--c2:#0c1018;--c3:#111820;
-  --accent:#00f5c4;--accent2:#7b5ea7;--accent3:#ff4d6d;
-  --text:#eeeef5;--muted:#5a6070;--border:rgba(255,255,255,0.06);
-  --border-hi:rgba(255,255,255,0.1);
+  --bg:#05050a;
+  --surface:#0f0f13;
+  --surface2:#141419;
+  --border:#1a1a2e;
+  --border2:#252540;
+  --accent:#00f5c4;
+  --accent-dim:#00f5c420;
+  --secondary:#7b5ea7;
+  --secondary-dim:#7b5ea720;
+  --text:#ededed;
+  --muted:#888;
+  --muted2:#555;
+  --radius:12px;
+  --font-head:'Syne',sans-serif;
+  --font-mono:'Space Mono',monospace;
+  --font-body:'Inter',sans-serif;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--c1);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{cursor:pointer;font-family:var(--font-body)}
 
-/* CURSOR */
-.cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);opacity:0;transition:transform 0.15s,background 0.2s}
-.cursor-trail{position:fixed;width:32px;height:32px;border:1px solid rgba(0,245,196,0.2);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:0;transition:border-color 0.2s}
-@media(hover:none),(pointer:coarse){body{cursor:auto}.cursor,.cursor-trail{display:none!important}}
+/* ─── Utilities ─────────────────────────── */
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.accent{color:var(--accent)}
+.secondary{color:var(--secondary)}
+.mono{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;border:1px solid var(--border2);font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+h1,h2,h3,h4{font-family:var(--font-head);line-height:1.15}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;transition:all .2s;border:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#05050a}
+.btn-primary:hover{background:#00ddb3;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--muted);border:none;font-size:.85rem}
+.btn-ghost:hover{color:var(--text)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 
-/* BG */
-#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.3;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
-.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.008) 1px,transparent 1px);background-size:80px 80px}
-.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(120px)}
-.orb1{width:800px;height:800px;background:radial-gradient(circle,rgba(0,245,196,0.055),transparent 70%);top:-350px;right:-250px}
-.orb2{width:600px;height:600px;background:radial-gradient(circle,rgba(123,94,167,0.065),transparent 70%);bottom:5%;left:-250px}
-.orb3{width:350px;height:350px;background:radial-gradient(circle,rgba(255,77,109,0.03),transparent 70%);top:45%;left:45%}
+/* ─── Nav ───────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;border-bottom:1px solid transparent;transition:all .3s;backdrop-filter:blur(0)}
+nav.scrolled{background:rgba(5,5,10,.85);border-color:var(--border);backdrop-filter:blur(20px)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:28px;height:28px}
+.nav-logo-text{font-family:var(--font-head);font-weight:700;font-size:1.1rem;letter-spacing:.02em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:.85rem;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-switch{display:flex;align-items:center;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:3px;font-family:var(--font-mono);font-size:.72rem}
+.lang-switch button{padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--muted);transition:all .2s;cursor:pointer}
+.lang-switch button.active{background:var(--border2);color:var(--text)}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 4rem;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid var(--border);background:rgba(5,5,10,0.55);transition:background 0.3s}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:0.1em;color:var(--accent);text-decoration:none;position:relative}
-.nav-logo span{color:rgba(255,255,255,0.3)}
-.nav-logo::before,.nav-logo::after{content:attr(data-text);position:absolute;top:0;left:0;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:0.1em;opacity:0;pointer-events:none}
-.nav-logo::before{color:#ff4d6d}
-.nav-logo::after{color:#00f5c4}
-.nav-logo.glitching::before{opacity:0.8;animation:g1 0.35s steps(3) forwards}
-.nav-logo.glitching::after{opacity:0.8;animation:g2 0.35s steps(3) forwards}
-@keyframes g1{0%{clip-path:inset(20% 0 60% 0);transform:translate(-4px)}50%{clip-path:inset(60% 0 10% 0);transform:translate(4px)}100%{clip-path:inset(0 0 100% 0);transform:translate(0)}}
-@keyframes g2{0%{clip-path:inset(50% 0 20% 0);transform:translate(4px)}50%{clip-path:inset(10% 0 70% 0);transform:translate(-4px)}100%{clip-path:inset(0 0 100% 0);transform:translate(0)}}
-.nav-links{display:flex;gap:2rem;list-style:none}
-.nav-links a{color:var(--muted);font-size:0.72rem;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;font-family:'Space Mono',monospace;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform 0.25s;transform-origin:left}
-.nav-links a:hover{color:var(--accent)}
-.nav-links a:hover::after{transform:scaleX(1)}
-.nav-cta{background:var(--accent);color:var(--c1);padding:0.5rem 1.3rem;font-family:'Space Mono',monospace;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:none;text-decoration:none;clip-path:polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px);transition:all 0.25s;display:inline-block}
-.nav-cta:hover{background:#00e8ba;transform:scale(1.04)}
-.burger{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px;background:none;border:none}
-.burger span{display:block;width:22px;height:1.5px;background:var(--text);transition:all 0.3s}
-.mobile-nav{display:none;position:fixed;inset:0;background:rgba(5,5,10,0.97);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;backdrop-filter:blur(20px)}
-.mobile-nav.open{display:flex}
-.mobile-nav a{font-family:'Syne',sans-serif;font-weight:700;font-size:1.8rem;color:var(--text);text-decoration:none;transition:color 0.2s}
-.mobile-nav a:hover{color:var(--accent)}
-.mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:none;font-family:'Space Mono',monospace;transition:color 0.2s}
-.mobile-close:hover{color:var(--text)}
+/* ─── Hero ──────────────────────────────── */
+.hero{padding:160px 0 100px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(0,245,196,.06) 0%,transparent 65%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-20%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(123,94,167,.07) 0%,transparent 65%);pointer-events:none}
+.hero-inner{display:grid;grid-template-columns:1fr 480px;gap:60px;align-items:center}
+.hero-label{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;border:1px solid rgba(0,245,196,.25);background:rgba(0,245,196,.06);font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.hero-label span{animation:pulse 2s infinite;width:7px;height:7px;background:var(--accent);border-radius:50%;display:block}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:800;letter-spacing:-.02em;margin-bottom:20px;line-height:1.1}
+.hero h1 .line2{color:var(--accent)}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:480px;line-height:1.65;margin-bottom:36px}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:32px;margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+.stat-num{font-family:var(--font-head);font-size:1.6rem;font-weight:700;color:var(--text)}
+.stat-label{font-size:.78rem;color:var(--muted);margin-top:2px}
 
-/* HERO */
-.hero{position:relative;z-index:2;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:7rem 4rem 4rem;gap:4rem;overflow:hidden}
-.hero-left{}
-.hero-badge{display:inline-flex;align-items:center;gap:0.55rem;border:1px solid rgba(0,245,196,0.2);padding:0.3rem 0.85rem;background:rgba(0,245,196,0.03);margin-bottom:1.75rem;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent)}
-.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:bdot 2s infinite;flex-shrink:0}
-@keyframes bdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.25;transform:scale(0.6)}}
-.hero-title{font-family:'Syne',sans-serif;font-weight:800;line-height:0.87;letter-spacing:-0.045em;font-size:clamp(3.5rem,6.5vw,7.5rem);margin-bottom:1.75rem}
-.hero-title .line{display:block;overflow:hidden}
-.hero-title .line span{display:block;transform:translateY(110%);animation:sup 1s cubic-bezier(0.16,1,0.3,1) forwards}
-.hero-title .l1 span{animation-delay:0.05s}
-.hero-title .l2 span{animation-delay:0.15s;color:var(--accent)}
-.hero-title .l3{display:flex;align-items:baseline;overflow:visible;min-height:1em;min-width:min(60vw,600px)}
-.hero-title .l3 span:first-child{display:block;transform:translateY(110%);animation:sup 1s cubic-bezier(0.16,1,0.3,1) 0.25s forwards;-webkit-text-stroke:1px rgba(255,255,255,0.15);color:transparent}
-.typed-cur{display:inline-block;width:2.5px;height:0.8em;background:var(--accent);margin-left:4px;vertical-align:middle;animation:blink 0.75s step-end infinite}
-@keyframes sup{to{transform:translateY(0)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.hero-sub{max-width:420px;font-size:0.975rem;line-height:1.8;color:var(--muted);margin-bottom:2.5rem;opacity:0;animation:fin 1s 0.6s forwards}
-@keyframes fin{to{opacity:1}}
-.hero-actions{display:flex;align-items:center;gap:1.75rem;flex-wrap:wrap;opacity:0;animation:fin 1s 0.8s forwards}
-.btn-p{background:var(--accent);color:var(--c1);padding:0.875rem 2.25rem;font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;cursor:none;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);transition:all 0.3s;display:inline-block;text-decoration:none;letter-spacing:0.03em}
-.btn-p:hover{background:#00e8ba;transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,245,196,0.25)}
-.btn-g{color:var(--muted);font-family:'Space Mono',monospace;font-size:0.78rem;text-decoration:none;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s;letter-spacing:0.04em}
-.btn-g:hover{color:var(--accent)}
-.btn-g svg{transition:transform 0.2s}
-.btn-g:hover svg{transform:translateX(3px)}
-.hero-meta{display:flex;gap:0;margin-top:3rem;opacity:0;animation:fin 1s 1s forwards;border:1px solid var(--border);background:rgba(255,255,255,0.015);width:fit-content}
-.hero-stat{padding:1rem 2rem;border-right:1px solid var(--border)}
-.hero-stat:last-child{border-right:none}
-.hero-stat-n{font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-0.03em}
-.hero-stat-l{font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-top:0.3rem}
+/* Phone mockup */
+.phone-wrap{position:relative}
+.phone-frame{width:280px;background:#111;border-radius:40px;padding:12px;border:2px solid #222;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px #333,inset 0 1px 0 rgba(255,255,255,.05);margin:0 auto;position:relative}
+.phone-notch{width:80px;height:24px;background:#111;border-radius:0 0 14px 14px;margin:0 auto 8px;border:1px solid #222;border-top:none}
+.phone-screen{background:#0a0a0a;border-radius:28px;overflow:hidden;min-height:460px;position:relative}
+.wa-header{background:#1a1a1a;padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222}
+.wa-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#05050a;flex-shrink:0}
+.wa-contact{flex:1}
+.wa-contact .name{font-size:.8rem;font-weight:600;color:#e1e1e1}
+.wa-contact .status{font-size:.65rem;color:#5ab946}
+.wa-back{width:20px;height:20px;color:#888;flex-shrink:0}
+.wa-messages{padding:12px;display:flex;flex-direction:column;gap:8px;min-height:380px}
+.wa-msg{max-width:85%;padding:8px 12px;border-radius:10px;font-size:.72rem;line-height:1.45;position:relative}
+.wa-msg.in{background:#1f1f1f;color:#e1e1e1;align-self:flex-start;border-bottom-left-radius:3px}
+.wa-msg.out{background:#005c4b;color:#e1e1e1;align-self:flex-end;border-bottom-right-radius:3px}
+.wa-msg .time{font-size:.58rem;color:rgba(255,255,255,.4);margin-top:3px;text-align:right}
+.wa-typing{display:flex;gap:3px;align-items:center;padding:10px 12px;background:var(--surface);border-radius:10px;align-self:flex-start;width:48px;margin-top:4px}
+.wa-typing span{width:6px;height:6px;background:var(--muted2);border-radius:50%;animation:typing .8s ease-in-out infinite}
+.wa-typing span:nth-child(2){animation-delay:.15s}
+.wa-typing span:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-5px);opacity:1}}
+.phone-glow{position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);width:200px;height:60px;background:var(--accent);filter:blur(40px);opacity:.12;border-radius:50%;pointer-events:none}
 
-/* PHONE MOCKUP */
-.hero-right{display:flex;justify-content:center;align-items:center;opacity:0;animation:fin 1s 0.5s forwards}
-.phone-frame{width:278px;height:556px;background:#080d14;border:1.5px solid rgba(255,255,255,0.1);border-radius:38px;padding:15px 13px;position:relative;box-shadow:0 50px 100px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.03),inset 0 1px 0 rgba(255,255,255,0.06);flex-shrink:0}
-.phone-frame::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:86px;height:24px;background:#080d14;border-radius:0 0 16px 16px;border:1.5px solid rgba(255,255,255,0.1);border-top:none;z-index:10}
-.phone-frame::after{content:'';position:absolute;inset:0;border-radius:38px;background:conic-gradient(from 180deg,transparent 55%,rgba(0,245,196,0.05) 75%,transparent 95%);animation:prot 7s linear infinite;pointer-events:none;z-index:1}
-@keyframes prot{to{transform:rotate(360deg)}}
+/* ─── Tech logos ─────────────────────────── */
+.tech-logos{padding:60px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.tech-logos-label{text-align:center;margin-bottom:28px}
+.tech-logos-grid{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.tech-logo-item{display:flex;align-items:center;gap:8px;opacity:.45;transition:opacity .2s;filter:grayscale(1)}
+.tech-logo-item:hover{opacity:.8;filter:grayscale(0)}
+.tech-logo-item svg{width:22px;height:22px}
+.tech-logo-item span{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
 
-/* APP INSIDE PHONE */
-.app-wrap{height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:25px;position:relative;z-index:2;background:#080d14}
-.app-header{background:#0f1623;padding:9px 12px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0}
-.app-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:0.72rem;color:var(--accent);letter-spacing:0.08em}
-.app-logo span{color:rgba(255,255,255,0.35)}
-.app-notif{width:6px;height:6px;border-radius:50%;background:var(--accent3);animation:bdot 1.5s infinite}
-.app-nav{background:#0c1420;display:flex;border-bottom:1px solid rgba(255,255,255,0.04);flex-shrink:0}
-.app-nav-item{flex:1;padding:7px 4px;text-align:center;font-family:'Space Mono',monospace;font-size:0.46rem;letter-spacing:0.04em;color:var(--muted);transition:color 0.2s;cursor:default;text-transform:uppercase}
-.app-nav-item.active{color:var(--accent);border-bottom:1.5px solid var(--accent)}
-.app-body{flex:1;overflow:hidden;background:#070b11;padding:9px;display:flex;flex-direction:column;gap:7px}
+/* ─── How it works (scroll animation) ──── */
+.how-section{padding:120px 0}
+.how-section-head{text-align:center;margin-bottom:80px}
+.how-section-head h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:16px}
+.how-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1100px;margin:0 auto}
 
-/* DASHBOARD */
-.dash-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-.dash-stat{background:#0f1623;border:1px solid rgba(255,255,255,0.05);border-radius:7px;padding:7px 9px}
-.dash-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--accent);line-height:1}
-.dash-stat-lbl{font-family:'Space Mono',monospace;font-size:0.4rem;color:var(--muted);margin-top:3px;letter-spacing:0.05em;text-transform:uppercase}
-.dash-stat-chg{font-size:0.4rem;color:#4ade80;margin-top:2px;font-family:'Space Mono',monospace}
-.dash-chart{background:#0f1623;border:1px solid rgba(255,255,255,0.05);border-radius:7px;padding:7px 9px}
-.dash-chart-title{font-family:'Space Mono',monospace;font-size:0.43rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px}
-.bars{display:flex;align-items:flex-end;gap:3px;height:34px}
-.bar{flex:1;border-radius:2px 2px 0 0;background:rgba(0,245,196,0.12);transition:height 0.5s}
-.bar.hi{background:var(--accent)}
-.dash-leads{background:#0f1623;border:1px solid rgba(255,255,255,0.05);border-radius:7px;overflow:hidden}
-.dash-leads-hd{padding:6px 9px;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between}
-.dash-leads-title{font-family:'Space Mono',monospace;font-size:0.43rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
-.dash-leads-badge{background:rgba(0,245,196,0.08);color:var(--accent);font-family:'Space Mono',monospace;font-size:0.38rem;padding:2px 5px;border-radius:3px}
-.lead-row{display:flex;align-items:center;gap:7px;padding:5px 9px;border-bottom:1px solid rgba(255,255,255,0.03)}
-.lead-row:last-child{border-bottom:none}
-.lead-ava{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.43rem;flex-shrink:0}
-.lead-info{flex:1;min-width:0}
-.lead-name{font-size:0.52rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Inter',sans-serif}
-.lead-co{font-family:'Space Mono',monospace;font-size:0.38rem;color:var(--muted);margin-top:1px}
-.lead-amt{font-family:'Syne',sans-serif;font-weight:800;font-size:0.48rem;color:var(--accent);white-space:nowrap}
-.lead-status{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.st-new{background:var(--accent)}
-.st-prog{background:#f59e0b}
-.st-done{background:#4ade80}
-.wa-notify{background:#0f1b15;border:1px solid rgba(37,211,102,0.15);border-radius:7px;padding:7px 9px;display:flex;gap:7px;align-items:flex-start}
-.wa-icon{width:20px;height:20px;border-radius:50%;background:rgba(37,211,102,0.12);display:flex;align-items:center;justify-content:center;font-size:0.55rem;flex-shrink:0}
-.wa-from{font-family:'Space Mono',monospace;font-size:0.4rem;color:#4ade80;letter-spacing:0.05em;margin-bottom:3px}
-.wa-msg{font-size:0.5rem;color:var(--text);line-height:1.4;font-family:'Inter',sans-serif}
-.wa-time{font-family:'Space Mono',monospace;font-size:0.36rem;color:var(--muted);margin-top:3px}
+/* Sticky mockup */
+.how-sticky{position:sticky;top:120px;padding:24px}
+.mockup-shell{background:var(--surface);border-radius:20px;border:1px solid var(--border);overflow:hidden;min-height:480px;position:relative}
+.vis-panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;pointer-events:none}
+.vis-panel.active{opacity:1;transform:none;pointer-events:auto}
+.vis-panel.inactive{opacity:0;transform:translateY(-16px)}
+/* Step panels */
+.vis-step1{background:linear-gradient(160deg,#0a1a12,#05050a)}
+.vis-step2{background:linear-gradient(160deg,#0d0a1a,#05050a)}
+.vis-step3{background:linear-gradient(160deg,#0a150a,#05050a)}
+.vis-step4{background:linear-gradient(160deg,#0a0d1a,#05050a)}
+.vis-step1.active .wa-typing-demo{animation:showTyping .6s .4s forwards;opacity:0}
+@keyframes showTyping{to{opacity:1}}
+.mock-wa-msg{background:#1f2a1f;border:1px solid rgba(0,245,196,.15);border-radius:12px;padding:12px 16px;width:100%;max-width:260px;text-align:left}
+.mock-wa-label{font-size:.65rem;color:var(--accent);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.mock-wa-text{font-size:.82rem;color:#e1e1e1;line-height:1.4}
+.mock-wa-time{font-size:.62rem;color:var(--muted2);margin-top:4px}
+.vis-arrow{width:40px;height:40px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;margin:16px auto}
+.vis-arrow svg{width:18px;height:18px;color:var(--accent)}
+.vis-processing{width:100%;max-width:260px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.vis-processing-label{font-size:.65rem;color:var(--secondary);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.vis-progress-track{background:var(--border);border-radius:999px;height:4px;overflow:hidden}
+.vis-progress-bar{height:100%;background:linear-gradient(90deg,var(--secondary),var(--accent));border-radius:999px;width:0;transition:width 1.5s ease}
+.vis-panel.active .vis-progress-bar{width:100%}
+.vis-tx-card{width:100%;max-width:260px;background:var(--surface2);border:1px solid rgba(0,245,196,.2);border-radius:14px;padding:18px;position:relative}
+.vis-tx-badge{position:absolute;top:-10px;right:-10px;width:28px;height:28px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;transform:scale(0);transition:transform .4s .6s}
+.vis-panel.active .vis-tx-badge{transform:scale(1)}
+.vis-tx-type{font-size:.65rem;color:var(--accent);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.vis-tx-name{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.vis-tx-qty{font-size:.85rem;color:var(--muted)}
+.vis-tg-card{width:100%;max-width:260px;background:#17212b;border-radius:14px;padding:16px;border:1px solid #1f2f3f}
+.vis-tg-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.vis-tg-icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2aabee,#007ab8);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.vis-tg-name{font-size:.8rem;font-weight:600;color:#e1e1e1}
+.vis-tg-sub{font-size:.65rem;color:#667}
+.vis-tg-msg{font-size:.8rem;color:#c8ccd3;line-height:1.5}
+.vis-tg-msg strong{color:#e1e1e1}
+.vis-count{font-family:var(--font-head);font-size:2.5rem;font-weight:700;color:var(--accent);text-align:center;animation:countUp .8s ease forwards;opacity:0}
+.vis-panel.active .vis-count{animation:countUp .8s .3s ease forwards}
+@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-/* MARQUEE */
-.mq-wrap{position:relative;z-index:2;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:0.85rem 0;background:rgba(255,255,255,0.01)}
-.mq{display:flex;gap:3rem;animation:mq 25s linear infinite;white-space:nowrap}
-.mq-item{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;transition:color 0.2s}
-.mq-item:hover{color:var(--accent)}
-.mq-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;opacity:0.6}
-@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* Steps */
+.how-steps{display:flex;flex-direction:column;gap:0}
+.how-step{padding:48px 32px;border-left:2px solid var(--border);margin-left:20px;position:relative;cursor:default;transition:all .3s}
+.how-step::before{content:attr(data-num);position:absolute;left:-20px;top:44px;width:36px;height:36px;border-radius:50%;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.75rem;color:var(--muted);transform:translateX(-50%);transition:all .3s}
+.how-step.active{border-color:var(--accent)}
+.how-step.active::before{background:var(--accent);border-color:var(--accent);color:#05050a}
+.how-step h3{font-size:1.25rem;font-weight:700;margin-bottom:8px;color:var(--muted);transition:color .3s}
+.how-step.active h3{color:var(--text)}
+.how-step p{font-size:.9rem;color:var(--muted2);line-height:1.65;transition:color .3s}
+.how-step.active p{color:var(--muted)}
+.how-step-icon{font-size:1.5rem;margin-bottom:10px;opacity:.4;transition:opacity .3s}
+.how-step.active .how-step-icon{opacity:1}
 
-/* SECTIONS */
-section{position:relative;z-index:2;padding:7rem 4rem}
-.s-label{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--accent);margin-bottom:1.1rem;display:flex;align-items:center;gap:0.7rem;opacity:0.8}
-.s-label::before{content:'//';opacity:0.5}
-.s-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,4.5vw,4rem);line-height:1.02;letter-spacing:-0.03em;margin-bottom:1.25rem}
-.s-desc{max-width:540px;color:var(--muted);font-size:0.95rem;line-height:1.85;margin-bottom:3rem}
-.divider{border:none;border-top:1px solid var(--border);margin:0 4rem}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.75s,transform 0.75s}
-.reveal.visible{opacity:1;transform:translateY(0)}
+/* ─── Features ───────────────────────────── */
+.features{padding:100px 0;background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 50%,var(--bg) 100%)}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.feat-card{background:var(--surface);padding:32px;transition:background .25s}
+.feat-card:hover{background:var(--surface2)}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(0,245,196,.15);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:1.2rem}
+.feat-card h3{font-size:1rem;font-weight:600;margin-bottom:8px}
+.feat-card p{font-size:.85rem;color:var(--muted);line-height:1.6}
 
-/* FEATURES */
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border);background:var(--border)}
-.feat-card{background:var(--c2);padding:2.5rem 2.25rem;position:relative;overflow:hidden;transition:background 0.4s,transform 0.35s}
-.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.5s;transform-origin:left}
-.feat-card::after{content:'';position:absolute;top:-60%;left:-60%;width:55%;height:220%;background:linear-gradient(105deg,transparent 40%,rgba(0,245,196,0.045) 50%,transparent 60%);transform:skewX(-15deg) translateX(-200%);transition:transform 0.75s ease}
-.feat-card:hover{background:rgba(0,245,196,0.025);transform:translateY(-2px)}
-.feat-card:hover::before{transform:scaleX(1)}
-.feat-card:hover::after{transform:skewX(-15deg) translateX(520%)}
-.feat-card:hover .feat-icon{border-color:rgba(0,245,196,0.4);background:rgba(0,245,196,0.05)}
-.feat-card:hover .feat-title{color:var(--accent)}
-.feat-n{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:rgba(255,255,255,0.03);line-height:1;margin-bottom:1.1rem;letter-spacing:-0.05em}
-.feat-icon{width:42px;height:42px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.2rem;clip-path:polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px);transition:border-color 0.3s,background 0.3s}
-.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.6rem;transition:color 0.3s;letter-spacing:-0.01em}
-.feat-desc{color:var(--muted);font-size:0.85rem;line-height:1.7}
+/* ─── Pricing ────────────────────────────── */
+.pricing{padding:100px 0}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:900px;margin:60px auto 0}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:24px;transition:border-color .25s,transform .25s;position:relative}
+.price-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.price-card.featured{border-color:var(--secondary);background:linear-gradient(160deg,#0f0a1a,var(--surface))}
+.price-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--secondary);color:#fff;font-size:.65rem;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 12px;border-radius:999px;white-space:nowrap}
+.price-tier{font-family:var(--font-head);font-size:1.4rem;font-weight:700}
+.price-desc{font-size:.85rem;color:var(--muted);line-height:1.6;flex:1}
+.price-list{display:flex;flex-direction:column;gap:8px}
+.price-item{display:flex;gap:10px;font-size:.82rem;color:var(--muted)}
+.price-item::before{content:'·';color:var(--accent);flex-shrink:0}
+.price-cta{display:block;text-align:center;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.85rem;border:1px solid var(--border2);color:var(--muted);transition:all .2s}
+.price-cta:hover,.price-card.featured .price-cta{background:var(--secondary);border-color:var(--secondary);color:#fff}
 
-/* HOW */
-.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
-.steps{display:flex;flex-direction:column}
-.step{display:flex;gap:1.5rem;padding:1.75rem 0;border-bottom:1px solid var(--border);cursor:default;transition:all 0.3s;position:relative}
-.step::before{content:'';position:absolute;left:-1.5rem;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(0);transition:transform 0.3s;transform-origin:top}
-.step:hover::before{transform:scaleY(1)}
-.step:hover .step-n{color:var(--accent)}
-.step-n{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:rgba(255,255,255,0.05);line-height:1;min-width:55px;transition:color 0.3s;letter-spacing:-0.05em}
-.step-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.975rem;margin-bottom:0.4rem;letter-spacing:-0.01em}
-.step-desc{color:var(--muted);font-size:0.85rem;line-height:1.65}
+/* ─── CTA ────────────────────────────────── */
+.cta-section{padding:100px 0;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(0,245,196,.05),transparent);pointer-events:none}
+.cta-box{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:72px 60px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.cta-box h2{font-size:clamp(1.8rem,3.5vw,2.8rem);margin-bottom:16px}
+.cta-box p{font-size:1rem;color:var(--muted);max-width:440px;margin:0 auto 36px;line-height:1.65}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
 
-/* FOR WHOM */
-.fw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--border);background:var(--border)}
-.fw-card{background:var(--c2);padding:2rem 1.75rem;position:relative;overflow:hidden;transition:background 0.35s,transform 0.35s;cursor:default}
-.fw-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
-.fw-card:hover{background:rgba(0,245,196,0.02);transform:translateY(-2px)}
-.fw-card:hover::after{transform:scaleX(1)}
-.fw-card:hover .fw-title{color:var(--accent)}
-.fw-emoji{font-size:1.6rem;margin-bottom:1rem;display:block}
-.fw-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:0.55rem;transition:color 0.3s;letter-spacing:-0.01em}
-.fw-desc{color:var(--muted);font-size:0.8rem;line-height:1.65;margin-bottom:0.85rem}
-.fw-tag{font-family:'Space Mono',monospace;font-size:0.56rem;color:var(--accent);letter-spacing:0.1em;border:1px solid rgba(0,245,196,0.15);display:inline-block;padding:0.18rem 0.5rem;background:rgba(0,245,196,0.03);opacity:0.8}
+/* ─── Footer ─────────────────────────────── */
+footer{border-top:1px solid var(--border);padding:60px 0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-logo-text{font-family:var(--font-head);font-weight:700;font-size:1.1rem;margin-bottom:8px}
+.footer-tagline{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:200px}
+.footer-col h4{font-size:.75rem;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:.85rem;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--accent)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid var(--border);font-size:.78rem;color:var(--muted2);gap:16px;flex-wrap:wrap}
+.footer-badge{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;background:var(--surface);border:1px solid var(--border)}
+.footer-badge span{font-family:var(--font-mono);font-size:.65rem}
 
-/* INTEGRATIONS */
-.int-wrap{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:2rem}
-.int-chip{border:1px solid var(--border);padding:0.4rem 0.95rem;font-family:'Space Mono',monospace;font-size:0.67rem;color:var(--muted);transition:all 0.2s;background:rgba(255,255,255,0.02);letter-spacing:0.03em}
-.int-chip:hover{border-color:rgba(0,245,196,0.3);color:var(--accent);background:rgba(0,245,196,0.03)}
+/* ─── Exit intent popup ──────────────────── */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.popup-overlay.show{opacity:1;pointer-events:auto}
+.popup-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:48px 40px;max-width:460px;width:100%;text-align:center;position:relative;transform:translateY(20px) scale(.97);transition:transform .35s;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.popup-overlay.show .popup-box{transform:none}
+.popup-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:50%;background:var(--border);border:none;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:background .2s}
+.popup-close:hover{background:var(--border2);color:var(--text)}
+.popup-emoji{font-size:2.5rem;margin-bottom:16px}
+.popup-box h3{font-family:var(--font-head);font-size:1.5rem;font-weight:700;margin-bottom:10px}
+.popup-box p{font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:28px}
+.popup-actions{display:flex;flex-direction:column;gap:10px}
+.popup-skip{font-size:.78rem;color:var(--muted2);margin-top:8px;cursor:pointer;transition:color .2s}
+.popup-skip:hover{color:var(--muted)}
 
-/* BEFORE/AFTER */
-.ba-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
-.ba-col{background:var(--c2);padding:2.5rem 2.25rem}
-.ba-col.ba-after{background:rgba(0,245,196,0.015)}
-.ba-head{margin-bottom:1.75rem}
-.ba-tag{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;padding:0.28rem 0.75rem;display:inline-block;margin-bottom:0.8rem}
-.ba-tag.bt-before{color:#ff8fa3;border:1px solid rgba(255,77,109,0.2);background:rgba(255,77,109,0.04)}
-.ba-tag.bt-after{color:var(--accent);border:1px solid rgba(0,245,196,0.2);background:rgba(0,245,196,0.04)}
-.ba-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:-0.02em}
-.ba-list{display:flex;flex-direction:column;gap:0.8rem}
-.ba-item{display:flex;align-items:flex-start;gap:0.7rem;font-size:0.875rem;line-height:1.55}
-.ba-ic{flex-shrink:0;margin-top:1px;font-size:0.75rem}
-.ba-col .ba-item{color:var(--muted)}
-.ba-col.ba-after .ba-item{color:var(--text)}
-
-/* VIDEO BTN */
-.video-btn{display:inline-flex;align-items:center;gap:0.9rem;cursor:none;transition:all 0.3s;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--muted);letter-spacing:0.04em}
-.video-btn:hover{color:var(--accent)}
-.vplay{width:38px;height:38px;min-width:38px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s;position:relative}
-.vplay::after{content:'▶';font-size:0.55rem;color:var(--muted);margin-left:2px;transition:color 0.3s}
-.video-btn:hover .vplay{border-color:rgba(0,245,196,0.4);background:rgba(0,245,196,0.06)}
-.video-btn:hover .vplay::after{color:var(--accent)}
-.vdur{opacity:0.45;font-size:0.65rem}
-.vmodal{position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;display:none;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(20px)}
-.vmodal.open{display:flex}
-.vmodal-inner{position:relative;width:100%;max-width:860px}
-.vmodal-close{position:absolute;top:-2.8rem;right:0;background:none;border:none;color:rgba(255,255,255,0.4);font-size:0.7rem;cursor:none;font-family:'Space Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;padding:0.5rem}
-.vmodal-close:hover{color:#fff}
-.vmodal-screen{aspect-ratio:16/9;width:100%;border:1px solid var(--border)}
-.vmodal-screen iframe{width:100%;height:100%;display:block;border:none}
-
-/* FAQ */
-.faq-list{max-width:680px;display:flex;flex-direction:column;margin:0 auto}
-.faq-item{border-bottom:1px solid var(--border)}
-.faq-q{width:100%;padding:1.35rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:none;text-align:left;font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);transition:color 0.2s;letter-spacing:-0.01em}
-.faq-q:hover{color:var(--accent)}
-.faq-arrow{font-size:1.2rem;color:rgba(0,245,196,0.6);flex-shrink:0;transition:transform 0.3s,color 0.2s;font-family:monospace;line-height:1}
-.faq-item.open .faq-arrow{transform:rotate(45deg);color:var(--accent)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;font-size:0.9rem;line-height:1.75;color:var(--muted);padding:0}
-.faq-item.open .faq-a{max-height:180px;padding-bottom:1.4rem}
-
-/* CTA */
-.cta-sec{text-align:center;padding:9rem 4rem;position:relative;overflow:hidden}
-.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(0,245,196,0.04) 0%,transparent 60%);pointer-events:none}
-.cta-sec .s-title{font-size:clamp(2.5rem,5.5vw,5rem);margin:0 auto 1.25rem}
-.cta-sec .s-desc{margin:0 auto 2.5rem}
-.capture-form{display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;margin-top:2rem}
-.cap-input{background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.8rem 1.2rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;min-width:190px;flex:1;max-width:220px}
-.cap-input::placeholder{color:var(--muted)}
-.cap-input:focus{border-color:rgba(0,245,196,0.35)}
-.cap-btn{background:var(--accent);color:var(--c1);padding:0.8rem 1.6rem;font-family:'Syne',sans-serif;font-size:0.875rem;font-weight:700;cursor:none;clip-path:polygon(7px 0%,100% 0%,100% calc(100% - 7px),calc(100% - 7px) 100%,0% 100%,0% 7px);transition:all 0.3s;white-space:nowrap;flex-shrink:0}
-.cap-btn:hover{background:#00e8ba;transform:translateY(-1px)}
-.cap-note{font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:0.6rem;letter-spacing:0.05em;opacity:0.7}
-
-/* FOOTER */
-footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:2.5rem 4rem;display:flex;flex-direction:column;gap:1.25rem}
-.ft-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
-.ft-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--accent);letter-spacing:0.05em}
-.ft-links{display:flex;gap:2rem;list-style:none}
-.ft-links a{color:var(--muted);font-family:'Space Mono',monospace;font-size:0.68rem;text-decoration:none;letter-spacing:0.1em;transition:color 0.2s}
-.ft-links a:hover{color:var(--text)}
-.ft-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-top:1px solid var(--border);padding-top:1.25rem}
-.ft-copy{font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted);opacity:0.7}
-.ft-rights{font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);opacity:0.45;max-width:460px;line-height:1.6}
-.ft-hub{display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem}
-.hub-lbl{font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--muted);letter-spacing:0.18em;text-transform:uppercase;opacity:0.5}
-.hub-img{height:24px;opacity:0.55;filter:brightness(0) invert(1);transition:opacity 0.2s}
-.hub-img:hover{opacity:0.9}
-
-/* FLOATING WA */
-.wa-float{position:fixed;bottom:2rem;left:2rem;z-index:500;display:flex;align-items:center;gap:0.7rem;background:#25D366;border-radius:100px;padding:0.55rem 1.1rem 0.55rem 0.65rem;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.3);animation:waf 3s ease-in-out infinite;transition:box-shadow 0.3s}
-.wa-float:hover{transform:scale(1.04)!important;animation:none;box-shadow:0 6px 30px rgba(37,211,102,0.55)}
-.wa-float svg{width:22px;height:22px;fill:#fff;flex-shrink:0}
-.wa-float-text{font-family:'Space Mono',monospace;font-size:0.67rem;font-weight:700;color:#fff;letter-spacing:0.04em;white-space:nowrap}
-@keyframes waf{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@media(max-width:600px){.wa-float-text{display:none}.wa-float{padding:0.65rem;border-radius:50%}}
-
-/* KZ language font override */
-.lang-kz .hero-title,
-.lang-kz .s-title,
-.lang-kz .feat-title,
-.lang-kz .step-title,
-.lang-kz .fw-title,
-.lang-kz .ba-title,
-.lang-kz .faq-q,
-.lang-kz .popup-title,
-.lang-kz .ft-logo,
-.lang-kz .hero-stat-n,
-.lang-kz .btn-p{
-  font-family:'Noto Sans',sans-serif;
-  font-weight:900;
-  letter-spacing:-0.02em;
+/* ─── Responsive ─────────────────────────── */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .phone-wrap{display:flex;justify-content:center;order:-1}
+  .hero-sub,.hero-stats{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .how-layout{grid-template-columns:1fr}
+  .how-sticky{position:static;margin-bottom:40px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
 }
-.lang-sw{display:flex;align-items:center;gap:0;border:1px solid var(--border);overflow:hidden}
-.lang-btn{font-family:'Space Mono',monospace;font-size:0.62rem;padding:0.36rem 0.6rem;color:var(--muted);cursor:none;transition:all 0.2s;letter-spacing:0.08em}
-.lang-btn.active{background:var(--accent);color:var(--c1);font-weight:700}
-.lang-btn:not(.active):hover{color:var(--text)}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .feat-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .cta-box{padding:48px 24px}
+  .hero-stats{gap:20px;flex-wrap:wrap;justify-content:center}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .tech-logos-grid{gap:24px}
+}
+@media(max-width:480px){
+  .hero{padding:120px 0 80px}
+  .hero h1{font-size:2.2rem}
+  .how-step{padding:32px 20px;margin-left:12px}
+  .how-step::before{left:-12px}
+}
 
-/* POPUP */
-.popup-ov{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:800;display:none;pointer-events:none}
-.popup-ov.show{display:block;pointer-events:auto}
-.popup-box{position:fixed;bottom:2rem;right:2rem;width:300px;background:var(--c2);border:1px solid rgba(0,245,196,0.15);padding:1.5rem;z-index:801;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1);box-shadow:0 24px 64px rgba(0,0,0,0.6)}
-@keyframes popIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.popup-close{position:absolute;top:0.7rem;right:0.7rem;color:var(--muted);font-size:0.9rem;cursor:none;transition:color 0.2s;opacity:0.6}
-.popup-close:hover{color:var(--text);opacity:1}
-.popup-title{font-family:'Syne',sans-serif;font-weight:800;font-size:0.975rem;margin-bottom:0.4rem;letter-spacing:-0.01em}
-.popup-desc{color:var(--muted);font-size:0.8rem;line-height:1.65;margin-bottom:1.1rem}
-.popup-wa{display:flex;align-items:center;justify-content:center;gap:0.55rem;background:#25D366;color:#fff;padding:0.72rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;text-decoration:none;transition:background 0.2s;width:100%}
-.popup-wa:hover{background:#1fba58}
-.popup-skip{font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);cursor:none;text-align:center;display:block;margin-top:0.55rem;transition:color 0.2s;letter-spacing:0.06em;opacity:0.6}
-.popup-skip:hover{color:var(--text);opacity:1}
-@media(max-width:600px){.popup-box{width:calc(100% - 3rem);right:1.5rem;bottom:1.5rem}}
-
-/* RESPONSIVE */
-@media(max-width:1100px){
-  .hero{grid-template-columns:1fr;padding:7rem 2rem 3rem;text-align:left}
-  .hero-right{display:none}
-}
-@media(max-width:900px){
-  nav{padding:1rem 1.5rem}
-  .nav-links,.nav-cta,.lang-sw{display:none}
-  .burger{display:flex}
-  section{padding:4.5rem 1.5rem}
-  .feat-grid{grid-template-columns:repeat(2,1fr)}
-  .how-grid{grid-template-columns:1fr;gap:3rem}
-  .fw-grid{grid-template-columns:repeat(2,1fr)}
-  .ba-wrap{grid-template-columns:1fr}
-  .divider{margin:0 1.5rem}
-  footer{padding:2rem 1.5rem}
-  .ft-top{flex-direction:column}
-  .ft-bottom{flex-direction:column;text-align:center}
-  .ft-hub{align-items:center}
-  .cta-sec{padding:5rem 1.5rem}
-}
-@media(max-width:600px){
-  .hero{padding:6rem 1.5rem 3rem}
-  .feat-grid{grid-template-columns:1fr;background:transparent;border:none;gap:0.75rem}
-  .feat-card{border:1px solid var(--border)}
-  .fw-grid{grid-template-columns:1fr}
-  .hero-meta{width:100%}
-  .hero-stat{flex:1;padding:0.85rem 1rem}
-}
+/* ─── Lang content ───────────────────────── */
+[data-lang-ru],[data-lang-kz]{display:none}
+body.lang-ru [data-lang-ru]{display:revert}
+body.lang-kz [data-lang-kz]{display:revert}
 </style>
 </head>
-<body>
-
-<div class="cursor" id="cursor"></div>
-<div class="cursor-trail" id="cursor-trail"></div>
-<div class="noise"></div>
-<div class="grid-bg"></div>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
-<canvas id="bg-canvas"></canvas>
+<body class="lang-ru">
 
 <!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="nav-logo" id="nav-logo" data-text="ADPulse">AD<span>Pulse</span></a>
-  <ul class="nav-links">
-    <li><a href="#features">Возможности</a></li>
-    <li><a href="#how">Как работает</a></li>
-    <li><a href="#integrations">Интеграции</a></li>
-    <li><a href="#forwhom">Для кого</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact">Контакт</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta" id="nav-cta-btn">Демо</a>
-  <div class="lang-sw">
-    <button class="lang-btn active" id="btn-ru" onclick="setLang('ru')">RU</button>
-    <button class="lang-btn" id="btn-kz" onclick="setLang('kz')">ҚАЗ</button>
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="AD Pulse">
+        <svg class="nav-logo-icon" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="8" fill="#00f5c4" fill-opacity=".1"/>
+          <path d="M7 14h3l3-6 4 12 3-8 2 2h3" stroke="#00f5c4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nav-logo-text">AD Pulse</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#how" data-lang-ru>Как работает</a>
+        <a href="#how" data-lang-kz>Қалай жұмыс істейді</a>
+        <a href="#features" data-lang-ru>Возможности</a>
+        <a href="#features" data-lang-kz>Мүмкіндіктер</a>
+        <a href="#pricing" data-lang-ru>Тарифы</a>
+        <a href="#pricing" data-lang-kz>Тарифтер</a>
+        <a href="mailto:uskembayev.zh@altaidynamics.kz">Email</a>
+      </div>
+
+      <div class="nav-right">
+        <div class="lang-switch">
+          <button id="btn-ru" class="active" onclick="setLang('ru')">RU</button>
+          <button id="btn-kz" onclick="setLang('kz')">ҚЗ</button>
+        </div>
+        <a href="https://pulse.altaidynamics.kz" class="btn btn-primary" style="padding:8px 18px;font-size:.82rem;">
+          <span data-lang-ru>Войти</span>
+          <span data-lang-kz>Кіру</span>
+        </a>
+      </div>
+    </div>
   </div>
-  <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </nav>
 
-<div class="mobile-nav" id="mobile-nav">
-  <button class="mobile-close" onclick="toggleMenu()">✕</button>
-  <a href="#features" onclick="toggleMenu()">Возможности</a>
-  <a href="#how" onclick="toggleMenu()">Как работает</a>
-  <a href="#forwhom" onclick="toggleMenu()">Для кого</a>
-  <a href="#faq" onclick="toggleMenu()">FAQ</a>
-  <a href="#contact" onclick="toggleMenu()">Контакт</a>
-</div>
-
 <!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-left">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>Altai Dynamics · B2B SaaS</div>
-    <h1 class="hero-title">
-      <div class="line l1"><span>Управляй</span></div>
-      <div class="line l2"><span>бизнесом</span></div>
-      <div class="line l3"><span id="typed-target"></span><span class="typed-cur"></span></div>
-    </h1>
-    <p class="hero-sub">AD Pulse — платформа для производственных компаний. WhatsApp CRM, склад, аналитика и 10+ интеграций в одном окне.</p>
-    <div class="hero-actions">
-      <a href="#contact" class="btn-p">Получить демо →</a>
-      <button class="btn-g" onclick="openVideo()" style="background:none;border:none;padding:0;cursor:none;">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-opacity="0.4"/><path d="M7.5 6L12 9L7.5 12V6Z" fill="currentColor"/></svg>
-        Смотреть демо
-      </button>
-    </div>
-    <div class="hero-meta">
-      <div><div class="hero-stat-n count-up" data-target="98">0</div><div class="hero-stat-l">% uptime</div></div>
-      <div><div class="hero-stat-n count-up" data-target="3">0</div><div class="hero-stat-l">мин запуск</div></div>
-      <div><div class="hero-stat-n count-up" data-target="10">0</div><div class="hero-stat-l">интеграций</div></div>
-    </div>
-  </div>
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-label">
+          <span></span>
+          <span data-lang-ru>Новый подход к учёту на производстве</span>
+          <span data-lang-kz>Өндірістегі есепке жаңа көзқарас</span>
+        </div>
 
-  <!-- PHONE -->
-  <div class="hero-right">
-    <div class="phone-frame">
-      <div class="app-wrap">
-        <div class="app-header">
-          <div class="app-logo">AD<span>Pulse</span></div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <div style="font-family:'Space Mono',monospace;font-size:0.4rem;color:var(--muted)">09:41</div>
-            <div class="app-notif"></div>
+        <h1>
+          <span data-lang-ru>WhatsApp&nbsp;→<br/><span class="line2">Учёт материалов</span></span>
+          <span data-lang-kz>Бизнесіңді басқар<br/><span class="line2">дұрысырақ</span></span>
+        </h1>
+
+        <p class="hero-sub">
+          <span data-lang-ru>Рабочие пишут в WhatsApp — система автоматически создаёт транзакции. Без таблиц, без ошибок ручного ввода.</span>
+          <span data-lang-kz>Жұмысшылар WhatsApp-қа жазады — жүйе автоматты түрде транзакциялар жасайды. Кестесіз, қолмен енгізу қателерінсіз.</span>
+        </p>
+
+        <div class="hero-actions">
+          <a href="https://pulse.altaidynamics.kz" class="btn btn-primary" style="padding:14px 28px;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span data-lang-ru>Открыть демо</span>
+            <span data-lang-kz>Демо ашу</span>
+          </a>
+          <a href="https://wa.me/77071115354" class="btn btn-outline">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span data-lang-ru>Написать в WhatsApp</span>
+            <span data-lang-kz>WhatsApp-та жазу</span>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">5 сек</div>
+            <div class="stat-label" data-lang-ru>от сообщения до транзакции</div>
+            <div class="stat-label" data-lang-kz>хабардан транзакцияға дейін</div>
+          </div>
+          <div>
+            <div class="stat-num">0 ₸</div>
+            <div class="stat-label" data-lang-ru>стоимость пилота</div>
+            <div class="stat-label" data-lang-kz>пилот бағасы</div>
+          </div>
+          <div>
+            <div class="stat-num">99%</div>
+            <div class="stat-label" data-lang-ru>точность распознавания</div>
+            <div class="stat-label" data-lang-kz>тану дәлдігі</div>
           </div>
         </div>
-        <div class="app-nav">
-          <div class="app-nav-item active">Дашборд</div>
-          <div class="app-nav-item">Заявки</div>
-          <div class="app-nav-item">Склад</div>
-          <div class="app-nav-item">WhatsApp</div>
-        </div>
-        <div class="app-body" id="app-body">
-          <!-- STATS -->
-          <div class="dash-stats">
-            <div class="dash-stat">
-              <div class="dash-stat-val" id="ph-revenue">850K</div>
-              <div class="dash-stat-lbl">Выручка ₸</div>
-              <div class="dash-stat-chg">▲ +12%</div>
-            </div>
-            <div class="dash-stat">
-              <div class="dash-stat-val" id="ph-orders">24</div>
-              <div class="dash-stat-lbl">Заявки</div>
-              <div class="dash-stat-chg">▲ +5</div>
-            </div>
-            <div class="dash-stat">
-              <div class="dash-stat-val">94%</div>
-              <div class="dash-stat-lbl">Конверсия</div>
-              <div class="dash-stat-chg" style="color:#f59e0b">▼ -2%</div>
-            </div>
-            <div class="dash-stat">
-              <div class="dash-stat-val">18</div>
-              <div class="dash-stat-lbl">Клиентов</div>
-              <div class="dash-stat-chg">▲ +3</div>
-            </div>
-          </div>
-          <!-- CHART -->
-          <div class="dash-chart">
-            <div class="dash-chart-title">Продажи · неделя</div>
-            <div class="bars" id="bars"></div>
-          </div>
-          <!-- LEADS -->
-          <div class="dash-leads">
-            <div class="dash-leads-hd">
-              <div class="dash-leads-title">Последние заявки</div>
-              <div class="dash-leads-badge" id="new-badge">3 новых</div>
-            </div>
-            <div class="lead-row">
-              <div class="lead-ava" style="background:rgba(0,245,196,0.12);color:var(--accent)">АС</div>
-              <div class="lead-info">
-                <div class="lead-name">Аскар Сейткали</div>
-                <div class="lead-co">AD Co.</div>
+      </div>
+
+      <!-- Phone mockup (hero, step 1 preview) -->
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="wa-header">
+              <svg class="wa-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              <div class="wa-avatar">С</div>
+              <div class="wa-contact">
+                <div class="name">Склад #1</div>
+                <div class="status">в сети</div>
               </div>
-              <div class="lead-amt">850K ₸</div>
-              <div class="lead-status st-new"></div>
             </div>
-            <div class="lead-row">
-              <div class="lead-ava" style="background:rgba(123,94,167,0.12);color:#c4b0e0">МД</div>
-              <div class="lead-info">
-                <div class="lead-name">Мейрам Досов</div>
-                <div class="lead-co">АлтайМеталл</div>
+            <div class="wa-messages">
+              <div class="wa-msg in">
+                <span data-lang-ru>Сегодня сколько цемент?</span>
+                <span data-lang-kz>Бүгін цемент қанша?</span>
+                <div class="time">09:14</div>
               </div>
-              <div class="lead-amt">420K ₸</div>
-              <div class="lead-status st-prog"></div>
-            </div>
-            <div class="lead-row">
-              <div class="lead-ava" style="background:rgba(74,222,128,0.1);color:#4ade80">БА</div>
-              <div class="lead-info">
-                <div class="lead-name">Болат Ахметов</div>
-                <div class="lead-co">Altai Corp.</div>
+              <div class="wa-msg out" style="animation:fadeIn .6s .3s both">
+                <span data-lang-ru>Привезли цемент М400 500 кг</span>
+                <span data-lang-kz>М400 цемент 500 кг жеткізілді</span>
+                <div class="time">09:17 ✓✓</div>
               </div>
-              <div class="lead-amt">1.2M ₸</div>
-              <div class="lead-status st-done"></div>
-            </div>
-          </div>
-          <!-- WA NOTIFY -->
-          <div class="wa-notify" id="wa-notify">
-            <div class="wa-icon">💬</div>
-            <div class="wa-text">
-              <div class="wa-from">WhatsApp · Новое</div>
-              <div class="wa-msg" id="wa-msg">Добрый день! Нужен цемент М400, 200 мешков...</div>
-              <div class="wa-time" id="wa-time">только что</div>
+              <div class="wa-typing" style="animation:fadeIn .4s 1s both">
+                <span></span><span></span><span></span>
+              </div>
             </div>
           </div>
         </div>
+        <div class="phone-glow"></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="mq-wrap">
-  <div class="mq">
-    <span class="mq-item"><span class="mq-dot"></span>WhatsApp CRM</span>
-    <span class="mq-item"><span class="mq-dot"></span>Управление складом</span>
-    <span class="mq-item"><span class="mq-dot"></span>Аналитика продаж</span>
-    <span class="mq-item"><span class="mq-dot"></span>Мультитенантность</span>
-    <span class="mq-item"><span class="mq-dot"></span>PDF экспорт</span>
-    <span class="mq-item"><span class="mq-dot"></span>Telegram бот</span>
-    <span class="mq-item"><span class="mq-dot"></span>1С интеграция</span>
-    <span class="mq-item"><span class="mq-dot"></span>Платёжный модуль</span>
-    <span class="mq-item"><span class="mq-dot"></span>WhatsApp CRM</span>
-    <span class="mq-item"><span class="mq-dot"></span>Управление складом</span>
-    <span class="mq-item"><span class="mq-dot"></span>Аналитика продаж</span>
-    <span class="mq-item"><span class="mq-dot"></span>Мультитенантность</span>
-    <span class="mq-item"><span class="mq-dot"></span>PDF экспорт</span>
-    <span class="mq-item"><span class="mq-dot"></span>Telegram бот</span>
-    <span class="mq-item"><span class="mq-dot"></span>1С интеграция</span>
-    <span class="mq-item"><span class="mq-dot"></span>Платёжный модуль</span>
+<!-- TECH LOGOS -->
+<div class="tech-logos">
+  <div class="container">
+    <p class="tech-logos-label mono" data-lang-ru>Построено на enterprise технологиях</p>
+    <p class="tech-logos-label mono" data-lang-kz>Enterprise технологияларда құрылған</p>
+    <div class="tech-logos-grid">
+      <div class="tech-logo-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.1-.471-.149-.67.15-.197.297-.767.966-.94 1.165-.173.198-.347.222-.644.075-.297-.15-1.255-.463-2.39-1.476-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.009-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0012.05 0z"/></svg>
+        <span>Wazzup</span>
+      </div>
+      <div class="tech-logo-item" style="color:#3ecf8e">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C.295 12.64.741 13.5 1.5 13.5h9.5V22.9c.015.987 1.26 1.41 1.874.637l9.262-11.653c.469-.591.023-1.451-.736-1.451H12V1.036Z"/></svg>
+        <span>Supabase</span>
+      </div>
+      <div class="tech-logo-item" style="color:#fff">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 22.525H0l12-21.05 12 21.05z"/></svg>
+        <span>Vercel</span>
+      </div>
+      <div class="tech-logo-item" style="color:#74aa9c">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.896zm16.597 3.855l-5.843-3.371 2.019-1.168a.075.075 0 0 1 .071 0l4.83 2.786a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.401-.674zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/></svg>
+        <span>OpenAI</span>
+      </div>
+      <div class="tech-logo-item" style="color:#2aabee">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span>Telegram</span>
+      </div>
+    </div>
   </div>
 </div>
-
-<!-- FEATURES -->
-<section id="features">
-  <div class="s-label">Возможности</div>
-  <h2 class="s-title reveal">Всё что нужно<br>для роста</h2>
-  <p class="s-desc reveal">Единая платформа для производственных и торговых компаний. Никаких лишних инструментов.</p>
-  <div class="feat-grid">
-    <div class="feat-card reveal"><div class="feat-n">01</div><div class="feat-icon">📦</div><div class="feat-title">Управление материалами</div><p class="feat-desc">Полный контроль склада, остатков и поставок. Автоматические уведомления о критических уровнях запасов.</p></div>
-    <div class="feat-card reveal"><div class="feat-n">02</div><div class="feat-icon">💬</div><div class="feat-title">WhatsApp CRM</div><p class="feat-desc">Принимай заявки прямо из WhatsApp. Автоответы, шаблоны, история переписки в едином окне.</p></div>
-    <div class="feat-card reveal"><div class="feat-n">03</div><div class="feat-icon">📊</div><div class="feat-title">Аналитика в реальном времени</div><p class="feat-desc">Дашборды продаж, воронки, прогнозы. Excel и PDF экспорт одной кнопкой.</p></div>
-    <div class="feat-card reveal"><div class="feat-n">04</div><div class="feat-icon">🏢</div><div class="feat-title">Мультитенантность</div><p class="feat-desc">Управляй несколькими компаниями из единого аккаунта с изолированными данными.</p></div>
-    <div class="feat-card reveal"><div class="feat-n">05</div><div class="feat-icon">🔗</div><div class="feat-title">Интеграции</div><p class="feat-desc">1С, Telegram, PayBox, Mobizon SMS, Google Calendar. Без программистов.</p></div>
-    <div class="feat-card reveal"><div class="feat-n">06</div><div class="feat-icon">🔒</div><div class="feat-title">Безопасность</div><p class="feat-desc">2FA, ролевой доступ, шифрование данных. Хранение на серверах в Казахстане.</p></div>
-  </div>
-</section>
-
-<hr class="divider">
 
 <!-- HOW IT WORKS -->
-<section id="how">
-  <div class="how-grid">
-    <div>
-      <div class="s-label">Как работает</div>
-      <h2 class="s-title reveal">Запуск за<br><span style="color:var(--accent)">3 шага</span></h2>
-      <div class="steps">
-        <div class="step reveal"><div class="step-n">01</div><div><div class="step-title">Регистрация компании</div><p class="step-desc">Создай аккаунт, добавь реквизиты и пригласи команду. Занимает 3 минуты.</p></div></div>
-        <div class="step reveal"><div class="step-n">02</div><div><div class="step-title">Подключи WhatsApp</div><p class="step-desc">Сканируй QR-код через Green API и получай заявки прямо в систему.</p></div></div>
-        <div class="step reveal"><div class="step-n">03</div><div><div class="step-title">Начни работать</div><p class="step-desc">Загрузи каталог, настрой воронку и обрабатывай заказы в едином дашборде.</p></div></div>
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="how-section-head">
+      <span class="tag" data-lang-ru>Процесс</span>
+      <span class="tag" data-lang-kz>Процесс</span>
+      <h2 data-lang-ru>Как это работает</h2>
+      <h2 data-lang-kz>Қалай жұмыс істейді</h2>
+      <p style="color:var(--muted);font-size:1rem;max-width:480px;margin:.8rem auto 0;line-height:1.65">
+        <span data-lang-ru>Четыре шага от сообщения до данных в системе</span>
+        <span data-lang-kz>Хабардан жүйедегі деректерге дейін төрт қадам</span>
+      </p>
+    </div>
+
+    <div class="how-layout">
+      <!-- Sticky visual panel -->
+      <div class="how-sticky">
+        <div class="mockup-shell">
+
+          <!-- Step 1: WhatsApp message -->
+          <div class="vis-panel vis-step1 active" id="vis-1">
+            <div style="text-align:left;width:100%;max-width:260px">
+              <p class="mono" style="margin-bottom:12px;color:var(--accent)" data-lang-ru>Входящее сообщение</p>
+              <p class="mono" style="margin-bottom:12px;color:var(--accent)" data-lang-kz>Кіріс хабарлама</p>
+              <div class="mock-wa-msg">
+                <div class="mock-wa-label">WhatsApp · Склад #1</div>
+                <div class="mock-wa-text" data-lang-ru>Привезли цемент М400, 500 кг</div>
+                <div class="mock-wa-text" data-lang-kz>М400 цемент 500 кг жеткізілді</div>
+                <div class="mock-wa-time">09:17 ✓✓</div>
+              </div>
+              <div class="wa-typing wa-typing-demo" style="margin-top:12px">
+                <span></span><span></span><span></span>
+              </div>
+              <p style="font-size:.72rem;color:var(--muted2);margin-top:16px" data-lang-ru>AD Pulse получил сообщение и начинает обработку...</p>
+              <p style="font-size:.72rem;color:var(--muted2);margin-top:16px" data-lang-kz>AD Pulse хабарламаны алды және өңдеуді бастайды...</p>
+            </div>
+          </div>
+
+          <!-- Step 2: Processing -->
+          <div class="vis-panel vis-step2" id="vis-2">
+            <div style="text-align:left;width:100%;max-width:260px">
+              <p class="mono" style="margin-bottom:12px;color:var(--secondary)" data-lang-ru>AI обрабатывает...</p>
+              <p class="mono" style="margin-bottom:12px;color:var(--secondary)" data-lang-kz>AI өңдейді...</p>
+              <div class="vis-processing">
+                <div class="vis-processing-label" data-lang-ru>Распознавание GPT-4o</div>
+                <div class="vis-processing-label" data-lang-kz>GPT-4o тану</div>
+                <div class="vis-progress-track"><div class="vis-progress-bar"></div></div>
+                <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between">
+                    <span data-lang-ru>Тип операции</span>
+                    <span data-lang-kz>Операция түрі</span>
+                    <span style="color:var(--accent)" data-lang-ru>Приход ✓</span>
+                    <span style="color:var(--accent)" data-lang-kz>Кіріс ✓</span>
+                  </div>
+                  <div style="font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between">
+                    <span data-lang-ru>Материал</span>
+                    <span data-lang-kz>Материал</span>
+                    <span style="color:var(--accent)">Цемент М400 ✓</span>
+                  </div>
+                  <div style="font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between">
+                    <span data-lang-ru>Количество</span>
+                    <span data-lang-kz>Саны</span>
+                    <span style="color:var(--accent)">500 кг ✓</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Transaction created -->
+          <div class="vis-panel vis-step3" id="vis-3">
+            <div style="text-align:left;width:100%;max-width:260px">
+              <p class="mono" style="margin-bottom:12px;color:var(--accent)" data-lang-ru>Транзакция создана</p>
+              <p class="mono" style="margin-bottom:12px;color:var(--accent)" data-lang-kz>Транзакция жасалды</p>
+              <div class="vis-tx-card">
+                <div class="vis-tx-badge">✓</div>
+                <div class="vis-tx-type" data-lang-ru>Приход материала</div>
+                <div class="vis-tx-type" data-lang-kz>Материал кірісі</div>
+                <div class="vis-tx-name">Цемент М400</div>
+                <div class="vis-tx-qty">500 кг · 09:17</div>
+                <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted)">
+                  <span data-lang-ru>Уверенность: </span>
+                  <span data-lang-kz>Сенімділік: </span>
+                  <span style="color:var(--accent)">высокая</span>
+                </div>
+              </div>
+              <p style="font-size:.72rem;color:var(--muted2);margin-top:12px" data-lang-ru>Остаток обновлён автоматически</p>
+              <p style="font-size:.72rem;color:var(--muted2);margin-top:12px" data-lang-kz>Қалдық автоматты түрде жаңартылды</p>
+            </div>
+          </div>
+
+          <!-- Step 4: Notifications -->
+          <div class="vis-panel vis-step4" id="vis-4">
+            <div style="text-align:left;width:100%;max-width:260px">
+              <p class="mono" style="margin-bottom:12px;color:#2aabee" data-lang-ru>Уведомление отправлено</p>
+              <p class="mono" style="margin-bottom:12px;color:#2aabee" data-lang-kz>Хабарлама жіберілді</p>
+              <div class="vis-tg-card">
+                <div class="vis-tg-header">
+                  <div class="vis-tg-icon">🤖</div>
+                  <div>
+                    <div class="vis-tg-name">AD Pulse Alerts</div>
+                    <div class="vis-tg-sub" data-lang-ru>бот · только что</div>
+                    <div class="vis-tg-sub" data-lang-kz>бот · дәл қазір</div>
+                  </div>
+                </div>
+                <div class="vis-tg-msg">
+                  <span data-lang-ru>✅ <strong>Приход</strong><br/>Материал: Цемент М400<br/>Количество: 500 кг<br/>Склад #1 · 09:17</span>
+                  <span data-lang-kz>✅ <strong>Кіріс</strong><br/>Материал: М400 цемент<br/>Саны: 500 кг<br/>Қойма №1 · 09:17</span>
+                </div>
+              </div>
+              <div style="margin-top:16px;display:flex;align-items:center;gap:10px">
+                <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px 14px;border:1px solid rgba(0,245,196,.15)">
+                  <div style="font-size:.65rem;color:var(--muted);margin-bottom:4px" data-lang-ru>Остаток цемента</div>
+                  <div style="font-size:.65rem;color:var(--muted);margin-bottom:4px" data-lang-kz>Цемент қалдығы</div>
+                  <div class="vis-count">2 350 кг</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Scrollable steps -->
+      <div class="how-steps" id="how-steps">
+        <div class="how-step active" data-step="1" data-num="01">
+          <div class="how-step-icon">💬</div>
+          <h3 data-lang-ru>Рабочий пишет в WhatsApp</h3>
+          <h3 data-lang-kz>Жұмысшы WhatsApp-қа жазады</h3>
+          <p data-lang-ru>Никаких приложений, инструкций или форм. Обычное сообщение в привычном чате: «Привезли цемент М400 500 кг» — и всё. Голосовые, фото накладных — тоже работает.</p>
+          <p data-lang-kz>Ешқандай қосымша, нұсқаулық немесе форм жоқ. Таныс чатта қарапайым хабарлама: «М400 цемент 500 кг жеткізілді» — міне бітті. Дауыстық хабарламалар, жүкқұжат фотолары да жұмыс істейді.</p>
+        </div>
+
+        <div class="how-step" data-step="2" data-num="02">
+          <div class="how-step-icon">🧠</div>
+          <h3 data-lang-ru>AI распознаёт операцию</h3>
+          <h3 data-lang-kz>AI операцияны таниды</h3>
+          <p data-lang-ru>GPT-4o разбирает сообщение на части: тип (приход/расход/брак/возврат), материал из вашего справочника, количество и единицу. Понимает опечатки, сленг, казахский язык.</p>
+          <p data-lang-kz>GPT-4o хабарламаны бөліктерге бөледі: түрі (кіріс/шығыс/ақаулы/қайтару), анықтамалықтағы материал, мөлшері мен бірлігі. Теру қателерін, сленгті, қазақ тілін түсінеді.</p>
+        </div>
+
+        <div class="how-step" data-step="3" data-num="03">
+          <div class="how-step-icon">✅</div>
+          <h3 data-lang-ru>Транзакция создаётся автоматически</h3>
+          <h3 data-lang-kz>Транзакция автоматты жасалады</h3>
+          <p data-lang-ru>Высокая уверенность — транзакция создаётся мгновенно. Неуверен — предлагает подтверждение менеджеру. Остатки обновляются в реальном времени.</p>
+          <p data-lang-kz>Жоғары сенімділік — транзакция лезде жасалады. Сенімсіз болса — менеджерге растауды ұсынады. Қалдықтар нақты уақытта жаңартылады.</p>
+        </div>
+
+        <div class="how-step" data-step="4" data-num="04">
+          <div class="how-step-icon">🔔</div>
+          <h3 data-lang-ru>Telegram-уведомление и дашборд</h3>
+          <h3 data-lang-kz>Telegram хабарлама және дашборд</h3>
+          <p data-lang-ru>Менеджер получает уведомление в Telegram. Дашборд обновляется: остатки, план/факт, алерты о критических запасах или перерасходе.</p>
+          <p data-lang-kz>Менеджер Telegram-да хабарлама алады. Дашборд жаңартылады: қалдықтар, жоспар/факт, сыни қорлар немесе шығынды туралы ескертулер.</p>
+        </div>
       </div>
     </div>
-    <!-- VIDEO DEMO -->
-    <div class="reveal" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1.5rem">
-      <div class="s-label">Демо</div>
-      <p style="color:var(--muted);font-size:0.95rem;line-height:1.75;max-width:360px">Посмотри как работает платформа — 3-минутный тур без регистрации.</p>
-      <button class="btn-g" onclick="openVideo()" style="background:none;border:none;cursor:none;font-family:'Space Mono',monospace;font-size:0.85rem">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-opacity="0.4"/><path d="M7.5 6L12 9L7.5 12V6Z" fill="currentColor"/></svg>
-        Смотреть демо
-        <span style="font-size:0.65rem;opacity:0.5;font-family:'Space Mono',monospace">· 3:24</span>
-      </button>
-    </div>
   </div>
 </section>
 
-<hr class="divider">
-
-<!-- FOR WHOM -->
-<section id="forwhom">
-  <div class="s-label">Для кого</div>
-  <h2 class="s-title reveal">Создан для<br><span style="color:var(--accent)">производственников</span></h2>
-  <p class="s-desc reveal">AD Pulse понимает специфику реального сектора — сезонность, партии, сложные цепочки поставок.</p>
-  <div class="fw-grid">
-    <div class="fw-card reveal"><div class="fw-emoji">🏗️</div><div class="fw-title">Стройматериалы</div><p class="fw-desc">Цемент, ЖБИ, кирпич, блоки. Контроль партий, отгрузок, дебиторки через WhatsApp.</p><div class="fw-tag">Бетон · Цемент · ЖБИ</div></div>
-    <div class="fw-card reveal"><div class="fw-emoji">⚙️</div><div class="fw-title">Металлоторговля</div><p class="fw-desc">Арматура, трубы, профиль. Учёт тоннажа, резка, остатки на складе в реальном времени.</p><div class="fw-tag">Металл · Прокат</div></div>
-    <div class="fw-card reveal"><div class="fw-emoji">🚛</div><div class="fw-title">Дистрибьюторы</div><p class="fw-desc">Несколько складов, десятки поставщиков — всё в одном окне с аналитикой.</p><div class="fw-tag">Опт · Логистика · B2B</div></div>
-    <div class="fw-card reveal"><div class="fw-emoji">🪵</div><div class="fw-title">Лесная промышленность</div><p class="fw-desc">Пиломатериалы, доска, брус. Учёт кубатуры и сортности в системе.</p><div class="fw-tag">Лес · Пиломатериалы</div></div>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- BEFORE / AFTER -->
-<section id="beforeafter">
-  <div class="s-label">До и после</div>
-  <h2 class="s-title reveal">Как было раньше<br><span style="color:var(--accent)">и как стало</span></h2>
-  <div class="ba-wrap">
-    <div class="ba-col reveal">
-      <div class="ba-head">
-        <div class="ba-tag bt-before">До AD Pulse</div>
-        <div class="ba-title">Excel + WhatsApp вручную</div>
-      </div>
-      <div class="ba-list">
-        <div class="ba-item"><span class="ba-ic">❌</span><span>Заявки теряются в переписке WhatsApp</span></div>
-        <div class="ba-item"><span class="ba-ic">❌</span><span>Остатки на складе узнаёшь звонком кладовщику</span></div>
-        <div class="ba-item"><span class="ba-ic">❌</span><span>Отчёт по продажам — 2 часа в Excel каждую неделю</span></div>
-        <div class="ba-item"><span class="ba-ic">❌</span><span>Менеджеры дублируют данные в 3 разных таблицах</span></div>
-        <div class="ba-item"><span class="ba-ic">❌</span><span>Клиент ждёт ответ по наличию 30+ минут</span></div>
-        <div class="ba-item"><span class="ba-ic">❌</span><span>Нет понимания какие клиенты приносят 80% выручки</span></div>
-      </div>
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:60px">
+      <span class="tag" data-lang-ru>Возможности</span>
+      <span class="tag" data-lang-kz>Мүмкіндіктер</span>
+      <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem)" data-lang-ru>Всё для производственного учёта</h2>
+      <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem)" data-lang-kz>Өндірістік есеп үшін барлығы</h2>
     </div>
-    <div class="ba-col ba-after reveal">
-      <div class="ba-head">
-        <div class="ba-tag bt-after">С AD Pulse</div>
-        <div class="ba-title">Всё в одном окне</div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">📱</div>
+        <h3 data-lang-ru>WhatsApp-интеграция</h3>
+        <h3 data-lang-kz>WhatsApp интеграциясы</h3>
+        <p data-lang-ru>Через Wazzup API. Поддержка текста, голоса, фото. Мультитенантность — каждая компания подключает свой аккаунт.</p>
+        <p data-lang-kz>Wazzup API арқылы. Мәтін, дауыс, фото қолдауы. Мультитенанттылық — әр компания өз аккаунтын қосады.</p>
       </div>
-      <div class="ba-list">
-        <div class="ba-item"><span class="ba-ic">✅</span><span>Каждая заявка из WhatsApp — автоматически в CRM</span></div>
-        <div class="ba-item"><span class="ba-ic">✅</span><span>Остатки в реальном времени прямо на телефоне</span></div>
-        <div class="ba-item"><span class="ba-ic">✅</span><span>Дашборд обновляется сам, отчёт в PDF за 1 клик</span></div>
-        <div class="ba-item"><span class="ba-ic">✅</span><span>Единая база — все видят актуальные данные</span></div>
-        <div class="ba-item"><span class="ba-ic">✅</span><span>Автоответ клиенту приходит за 30 секунд</span></div>
-        <div class="ba-item"><span class="ba-ic">✅</span><span>Аналитика по клиентам, каналам и продуктам</span></div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3 data-lang-ru>Приход / Расход / Брак / Возврат</h3>
+        <h3 data-lang-kz>Кіріс / Шығыс / Ақаулы / Қайтару</h3>
+        <p data-lang-ru>Полный цикл движения материалов. Справочник с единицами измерения и нормами ГОСТ. История транзакций с экспортом в Excel.</p>
+        <p data-lang-kz>Материалдардың толық қозғалыс циклі. ГОСТ нормалары бар өлшем бірліктерінің анықтамалығы. Excel-ге экспорт мүмкіндігі бар транзакция тарихы.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <h3 data-lang-ru>Производственные планы</h3>
+        <h3 data-lang-kz>Өндіріс жоспарлары</h3>
+        <p data-lang-ru>Создавайте планы по цехам. Отслеживайте отклонения план/факт в реальном времени. Автоматические алерты при перерасходе.</p>
+        <p data-lang-kz>Цехтар бойынша жоспарлар жасаңыз. Нақты уақытта жоспар/факт ауытқуларын қадағалаңыз. Шығын кезінде автоматты ескертулер.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔔</div>
+        <h3 data-lang-ru>Telegram-алерты</h3>
+        <h3 data-lang-kz>Telegram ескертулері</h3>
+        <p data-lang-ru>Уведомления о браке, критических остатках, перерасходе плана. Мгновенно на телефон менеджера.</p>
+        <p data-lang-kz>Ақаулы, сыни қалдықтар, жоспар шығыны туралы хабарландырулар. Менеджер телефонына лезде.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">👥</div>
+        <h3 data-lang-ru>Роли и права доступа</h3>
+        <h3 data-lang-kz>Рөлдер мен қол жеткізу құқықтары</h3>
+        <p data-lang-ru>Администратор, менеджер, склад, цех. Каждая роль видит только своё. Приглашение через email.</p>
+        <p data-lang-kz>Әкімші, менеджер, қойма, цех. Әр рөл тек өзінікін көреді. Email арқылы шақыру.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📈</div>
+        <h3 data-lang-ru>Отчёты и аналитика</h3>
+        <h3 data-lang-kz>Есептер мен аналитика</h3>
+        <p data-lang-ru>Дашборд с ключевыми метриками. Фильтры по датам, материалам, типам. Экспорт в Excel одной кнопкой.</p>
+        <p data-lang-kz>Негізгі метрикалар бар дашборд. Күндер, материалдар, түрлер бойынша сүзгілер. Бір батырмамен Excel-ге экспорт.</p>
       </div>
     </div>
   </div>
 </section>
 
-<hr class="divider">
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="tag" data-lang-ru>Тарифы</span>
+      <span class="tag" data-lang-kz>Тарифтер</span>
+      <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem)" data-lang-ru>Гибкие условия для любого масштаба</h2>
+      <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem)" data-lang-kz>Кез келген масштаб үшін икемді шарттар</h2>
+      <p style="color:var(--muted);margin-top:12px;font-size:.95rem" data-lang-ru>Расскажите о вашем производстве — предложим оптимальное решение</p>
+      <p style="color:var(--muted);margin-top:12px;font-size:.95rem" data-lang-kz>Өндіріңіз туралы айтыңыз — оңтайлы шешімді ұсынамыз</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div>
+          <div class="price-tier" data-lang-ru>Старт</div>
+          <div class="price-tier" data-lang-kz>Бастау</div>
+          <div class="price-desc" data-lang-ru style="margin-top:8px">Для малых цехов и складов. Быстрый старт без интеграций.</div>
+          <div class="price-desc" data-lang-kz style="margin-top:8px">Шағын цехтар мен қоймалар үшін. Интеграциясыз жылдам іске қосу.</div>
+        </div>
+        <div class="price-list">
+          <div class="price-item" data-lang-ru>До 5 пользователей</div>
+          <div class="price-item" data-lang-kz>5 пайдаланушыға дейін</div>
+          <div class="price-item" data-lang-ru>WhatsApp + Telegram</div>
+          <div class="price-item" data-lang-kz>WhatsApp + Telegram</div>
+          <div class="price-item" data-lang-ru>Приход/Расход/Брак</div>
+          <div class="price-item" data-lang-kz>Кіріс/Шығыс/Ақаулы</div>
+          <div class="price-item" data-lang-ru>Базовые отчёты</div>
+          <div class="price-item" data-lang-kz>Негізгі есептер</div>
+        </div>
+        <a href="https://wa.me/77071115354" class="price-cta" data-lang-ru>Обсудить условия →</a>
+        <a href="https://wa.me/77071115354" class="price-cta" data-lang-kz>Шарттарды талқылау →</a>
+      </div>
 
-<!-- INTEGRATIONS -->
-<section id="integrations">
-  <div class="s-label">Интеграции</div>
-  <h2 class="s-title reveal">Подключается<br>ко всему</h2>
-  <div class="int-wrap reveal">
-    <div class="int-chip">WhatsApp (Green API)</div>
-    <div class="int-chip">Telegram Bot</div>
-    <div class="int-chip">1С Бухгалтерия</div>
-    <div class="int-chip">PayBox</div>
-    <div class="int-chip">Mobizon SMS</div>
-    <div class="int-chip">Google Calendar</div>
-    <div class="int-chip">Outlook Calendar</div>
-    <div class="int-chip">Excel / PDF</div>
-    <div class="int-chip">REST API</div>
-    <div class="int-chip">Webhooks</div>
+      <div class="price-card featured">
+        <div class="price-badge" data-lang-ru>Популярный</div>
+        <div class="price-badge" data-lang-kz>Танымал</div>
+        <div>
+          <div class="price-tier" data-lang-ru>Бизнес</div>
+          <div class="price-tier" data-lang-kz>Бизнес</div>
+          <div class="price-desc" data-lang-ru style="margin-top:8px">Для среднего производства с несколькими цехами и активным учётом.</div>
+          <div class="price-desc" data-lang-kz style="margin-top:8px">Бірнеше цехы бар орта өндіріс үшін белсенді есеппен.</div>
+        </div>
+        <div class="price-list">
+          <div class="price-item" data-lang-ru>До 20 пользователей</div>
+          <div class="price-item" data-lang-kz>20 пайдаланушыға дейін</div>
+          <div class="price-item" data-lang-ru>Производственные планы</div>
+          <div class="price-item" data-lang-kz>Өндіріс жоспарлары</div>
+          <div class="price-item" data-lang-ru>AI-парсинг голоса и фото</div>
+          <div class="price-item" data-lang-kz>Дауыс пен фотоны AI-тану</div>
+          <div class="price-item" data-lang-ru>Excel-экспорт</div>
+          <div class="price-item" data-lang-kz>Excel-экспорт</div>
+          <div class="price-item" data-lang-ru>Приоритетная поддержка</div>
+          <div class="price-item" data-lang-kz>Басымдықты қолдау</div>
+        </div>
+        <a href="https://wa.me/77071115354" class="price-cta" data-lang-ru>Обсудить условия →</a>
+        <a href="https://wa.me/77071115354" class="price-cta" data-lang-kz>Шарттарды талқылау →</a>
+      </div>
+
+      <div class="price-card">
+        <div>
+          <div class="price-tier">Enterprise</div>
+          <div class="price-desc" data-lang-ru style="margin-top:8px">Для крупных заводов. Кастомизация, SLA, выделенный аккаунт-менеджер.</div>
+          <div class="price-desc" data-lang-kz style="margin-top:8px">Ірі зауыттар үшін. Кастомизация, SLA, арнайы аккаунт-менеджер.</div>
+        </div>
+        <div class="price-list">
+          <div class="price-item" data-lang-ru>Неограниченно пользователей</div>
+          <div class="price-item" data-lang-kz>Шектеусіз пайдаланушылар</div>
+          <div class="price-item" data-lang-ru>Кастомная интеграция</div>
+          <div class="price-item" data-lang-kz>Арнаулы интеграция</div>
+          <div class="price-item" data-lang-ru>On-premise вариант</div>
+          <div class="price-item" data-lang-kz>On-premise нұсқасы</div>
+          <div class="price-item" data-lang-ru>SLA 99.9%</div>
+          <div class="price-item" data-lang-kz>SLA 99.9%</div>
+        </div>
+        <a href="mailto:uskembayev.zh@altaidynamics.kz" class="price-cta" data-lang-ru>Связаться →</a>
+        <a href="mailto:uskembayev.zh@altaidynamics.kz" class="price-cta" data-lang-kz>Байланысу →</a>
+      </div>
+    </div>
   </div>
 </section>
-
-<hr class="divider">
-
-<!-- FAQ -->
-<section id="faq" style="text-align:center">
-  <div class="s-label" style="justify-content:center">FAQ</div>
-  <h2 class="s-title reveal">Частые вопросы</h2>
-  <div class="faq-list">
-    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)"><span>Нужны ли технические знания?</span><span class="faq-arrow">+</span></button><div class="faq-a">Нет. Подключение WhatsApp — это сканирование QR-кода. Остальные настройки через визуальный интерфейс. Если возникнут вопросы — помогаем лично.</div></div>
-    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)"><span>Как хранятся данные?</span><span class="faq-arrow">+</span></button><div class="faq-a">Данные хранятся на серверах в Казахстане, зашифрованы AES-256. Доступ по ролям, 2FA, полный аудит действий. Возможно On-premise развёртывание.</div></div>
-    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)"><span>Можно управлять несколькими компаниями?</span><span class="faq-arrow">+</span></button><div class="faq-a">Да. Мультитенантная архитектура позволяет управлять несколькими юридическими лицами из одного аккаунта с полной изоляцией данных.</div></div>
-    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)"><span>Есть ли интеграция с 1С?</span><span class="faq-arrow">+</span></button><div class="faq-a">Да, полная двусторонняя синхронизация с 1С:Бухгалтерия и 1С:Торговля. Данные синхронизируются автоматически по расписанию или в реальном времени.</div></div>
-    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)"><span>Сколько стоит?</span><span class="faq-arrow">+</span></button><div class="faq-a">Стоимость рассчитывается индивидуально. Пишите в WhatsApp — покажем демо и обсудим условия. Первые 14 дней бесплатно.</div></div>
-  </div>
-</section>
-
-<hr class="divider">
 
 <!-- CTA -->
-<section class="cta-sec" id="contact">
-  <div class="cta-glow"></div>
-  <div style="display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(0,245,196,0.25);padding:0.35rem 0.9rem;background:rgba(0,245,196,0.04);margin-bottom:2rem;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)"><span class="hero-badge-dot"></span>Готовы начать?</div>
-  <h2 class="s-title reveal">Запусти AD Pulse<br>сегодня</h2>
-  <p class="s-desc reveal" style="margin:0 auto 3rem">Оставь заявку и мы свяжемся в течение 1 часа. Покажем живое демо на твоих данных. Без обязательств.</p>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1" class="reveal">
-    <a href="https://wa.me/77071115354" class="btn-p" style="font-size:0.95rem">Написать в WhatsApp →</a>
-    <a href="mailto:hello@altaidynamics.kz" class="btn-g" style="border:1px solid var(--border);padding:0.9rem 1.8rem">Email нам</a>
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <h2 data-lang-ru>Готовы автоматизировать учёт?</h2>
+      <h2 data-lang-kz>Есепті автоматтандыруға дайынсыз ба?</h2>
+      <p data-lang-ru>Покажем демо на ваших данных за 15 минут. Без презентаций и продающих звонков.</p>
+      <p data-lang-kz>15 минут ішінде деректеріңізде демо көрсетеміз. Презентациясыз және сатылымдық қоңыраусыз.</p>
+      <div class="cta-actions">
+        <a href="https://pulse.altaidynamics.kz" class="btn btn-primary" style="padding:14px 28px">
+          <span data-lang-ru>Открыть демо</span>
+          <span data-lang-kz>Демо ашу</span>
+        </a>
+        <a href="https://wa.me/77071115354" class="btn btn-outline">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span data-lang-ru>WhatsApp нам</span>
+          <span data-lang-kz>WhatsApp-та жазыңыз</span>
+        </a>
+      </div>
+    </div>
   </div>
-  <div class="capture-form reveal">
-    <input type="text" class="cap-input" id="cap-name" placeholder="Ваше имя">
-    <input type="text" class="cap-input" id="cap-phone" placeholder="+7 777 000 00 00">
-    <button class="cap-btn" onclick="submitCapture()">Перезвоните мне →</button>
-  </div>
-  <div class="cap-note reveal">Оставь номер — свяжемся в течение 1 часа в рабочее время</div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="ft-top">
-    <div class="ft-logo">AD Pulse · Altai Dynamics</div>
-    <ul class="ft-links">
-      <li><a href="#features">Продукт</a></li>
-      <li><a href="#integrations">Интеграции</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="#contact">Контакт</a></li>
-      <li><a href="privacy.html">Политика конфиденциальности</a></li>
-    </ul>
-  </div>
-  <!-- CONTACT INFO -->
-  <div style="display:flex;flex-wrap:wrap;gap:1.5rem;padding:1.25rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-    <div style="display:flex;gap:0.5rem;align-items:center">
-      <span style="font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;opacity:0.7">Компания</span>
-      <span style="font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted)">ТОО «Altai Dynamics» · БИН 260340030272</span>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-text">AD Pulse</div>
+        <div class="footer-tagline" data-lang-ru>Система учёта материалов для производственных компаний Казахстана</div>
+        <div class="footer-tagline" data-lang-kz>Қазақстан өндіріс компанияларына арналған материал есебі жүйесі</div>
+      </div>
+      <div>
+        <h4 data-lang-ru>Продукт</h4>
+        <h4 data-lang-kz>Өнім</h4>
+        <div class="footer-links">
+          <a href="#features" data-lang-ru>Возможности</a>
+          <a href="#features" data-lang-kz>Мүмкіндіктер</a>
+          <a href="#pricing" data-lang-ru>Тарифы</a>
+          <a href="#pricing" data-lang-kz>Тарифтер</a>
+          <a href="https://pulse.altaidynamics.kz" data-lang-ru>Демо</a>
+          <a href="https://pulse.altaidynamics.kz" data-lang-kz>Демо</a>
+        </div>
+      </div>
+      <div>
+        <h4 data-lang-ru>Компания</h4>
+        <h4 data-lang-kz>Компания</h4>
+        <div class="footer-links">
+          <a href="https://altaidynamics.kz" data-lang-ru>Altai Dynamics</a>
+          <a href="https://altaidynamics.kz" data-lang-kz>Altai Dynamics</a>
+          <a href="/privacy.html" data-lang-ru>Политика конфиденциальности</a>
+          <a href="/privacy.html" data-lang-kz>Құпиялылық саясаты</a>
+        </div>
+      </div>
+      <div>
+        <h4 data-lang-ru>Контакты</h4>
+        <h4 data-lang-kz>Байланыс</h4>
+        <div class="footer-links">
+          <a href="mailto:uskembayev.zh@altaidynamics.kz">uskembayev.zh@altaidynamics.kz</a>
+          <a href="https://wa.me/77071115354">+7 707 111 53 54</a>
+          <a href="https://wa.me/77071115354" data-lang-ru>WhatsApp</a>
+          <a href="https://wa.me/77071115354" data-lang-kz>WhatsApp</a>
+        </div>
+      </div>
     </div>
-    <div style="display:flex;gap:0.5rem;align-items:center">
-      <span style="font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;opacity:0.7">Адрес</span>
-      <span style="font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted)">Астана, р-н Есиль, ул. Керей Жәнібек хандар, д.9, кв.221</span>
-    </div>
-    <div style="display:flex;gap:0.5rem;align-items:center">
-      <span style="font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;opacity:0.7">Тел</span>
-      <a href="tel:+77077246790" style="font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">+7 707 724 67 90</a>
-    </div>
-    <div style="display:flex;gap:0.5rem;align-items:center">
-      <span style="font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;opacity:0.7">Email</span>
-      <a href="mailto:altai.dx@gmail.com" style="font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">altai.dx@gmail.com</a>
-    </div>
-  </div>
-  <div class="ft-bottom">
-    <div>
-      <div class="ft-copy">© 2026 Altai Dynamics. Все права защищены. Астана, Казахстан.</div>
-      <div class="ft-rights" style="margin-top:0.4rem">AD Pulse и Altai Dynamics являются зарегистрированными товарными знаками. Платформа, дизайн и исходный код защищены авторским правом.</div>
-    </div>
-    <div class="ft-hub">
-      <div class="hub-lbl">Резидент</div>
-      <img src="https://cdn.astanahub.com/static/img_v2/logo.svg" alt="Astana Hub" class="hub-img">
+    <div class="footer-bottom">
+      <span>© 2026 Altai Dynamics LLP. <span data-lang-ru>Все права защищены.</span><span data-lang-kz>Барлық құқықтар қорғалған.</span></span>
+      <div class="footer-badge">
+        <svg width="12" height="12" fill="#3ecf8e" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span style="color:var(--muted2)">Powered by Supabase</span>
+      </div>
     </div>
   </div>
 </footer>
 
-<!-- VIDEO MODAL — rickroll until real demo -->
-<div class="vmodal" id="vmodal" onclick="closeVideo()">
-  <div class="vmodal-inner" onclick="event.stopPropagation()">
-    <button class="vmodal-close" onclick="closeVideo()">[ ESC ] закрыть</button>
-    <div class="vmodal-screen">
-      <iframe id="vframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<!-- EXIT INTENT POPUP -->
+<div class="popup-overlay" id="exit-popup">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()" aria-label="Закрыть">✕</button>
+    <div class="popup-emoji">⚡</div>
+    <h3 data-lang-ru>Подождите!</h3>
+    <h3 data-lang-kz>Тоқтаңыз!</h3>
+    <p data-lang-ru>Покажем демо <strong style="color:var(--text)">на ваших данных</strong> за 15 минут. Без лишних звонков и презентаций.</p>
+    <p data-lang-kz><strong style="color:var(--text)">Деректеріңізде</strong> 15 минутта демо көрсетеміз. Артық қоңыраусыз және презентациясыз.</p>
+    <div class="popup-actions">
+      <a href="https://wa.me/77071115354?text=Хочу+посмотреть+демо+AD+Pulse" class="btn btn-primary" style="width:100%;padding:14px" onclick="closePopup()">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-lang-ru>Написать в WhatsApp</span>
+        <span data-lang-kz>WhatsApp-та жазу</span>
+      </a>
+      <a href="https://pulse.altaidynamics.kz" class="btn btn-outline" style="width:100%" onclick="closePopup()">
+        <span data-lang-ru>Открыть демо самостоятельно</span>
+        <span data-lang-kz>Демоны өзім ашу</span>
+      </a>
+    </div>
+    <div class="popup-skip" onclick="closePopup()">
+      <span data-lang-ru>Нет, спасибо</span>
+      <span data-lang-kz>Жоқ, рақмет</span>
     </div>
   </div>
 </div>
 
-<!-- FLOATING WA -->
-<a href="https://wa.me/77071115354" class="wa-float" target="_blank" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  <span class="wa-float-text">Написать нам</span>
-</a>
-
-<!-- POPUP -->
-<div class="popup-ov" id="popup-ov">
-  <div class="popup-box" id="popup-box">
-    <button class="popup-close" onclick="closePopup()">✕</button>
-    <div class="popup-title" id="popup-title">Остались вопросы?</div>
-    <p class="popup-desc" id="popup-desc">Напишите нам в WhatsApp — ответим за 5 минут и покажем живое демо.</p>
-    <a href="https://wa.me/77071115354" class="popup-wa" target="_blank">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Написать в WhatsApp
-    </a>
-    <button class="popup-skip" onclick="closePopup()" id="popup-skip">Нет, спасибо</button>
-  </div>
-</div>
-
 <script>
-// TOUCH DETECT
-const isTouch=('ontouchstart' in window)||navigator.maxTouchPoints>0;
-
-// CURSOR
-const cursor=document.getElementById('cursor'),trail=document.getElementById('cursor-trail');
-let mx=window.innerWidth/2,my=window.innerHeight/2,tx=mx,ty=my;
-if(!isTouch){
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    cursor.style.left=mx+'px';cursor.style.top=my+'px';
-    cursor.style.opacity='1';trail.style.opacity='1';
-  });
-  (function at(){tx+=(mx-tx)*0.28;ty+=(my-ty)*0.28;trail.style.left=Math.round(tx)+'px';trail.style.top=Math.round(ty)+'px';requestAnimationFrame(at)})();
-  document.querySelectorAll('a,button,.feat-card,.step,.fw-card,.int-chip,.wa-float,.faq-q,.ba-col').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2.5)';cursor.style.background='#7b5ea7'});
-    el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';cursor.style.background='var(--accent)'});
-  });
+// ─── Lang switch ──────────────────────────
+function setLang(lang) {
+  document.body.className = 'lang-' + lang;
+  document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+  document.getElementById('btn-kz').classList.toggle('active', lang === 'kz');
+  document.documentElement.lang = lang === 'kz' ? 'kk' : 'ru';
+  localStorage.setItem('adp-lang', lang);
 }
+(function(){
+  const saved = localStorage.getItem('adp-lang');
+  if (saved === 'kz') setLang('kz');
+})();
 
-// RICH CANVAS — particles + mouse repel + connections + floating rings
-const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
-let W,H;
-function rs(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
-rs();addEventListener('resize',rs);
+// ─── Nav scroll ───────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
 
-// --- Particles ---
-class Particle{
-  constructor(i){
-    this.i=i;
-    this.reset(true);
-  }
-  reset(init){
-    this.x=Math.random()*W;
-    this.y=Math.random()*H;
-    this.ox=this.x;this.oy=this.y;
-    this.vx=(Math.random()-.5)*.4;
-    this.vy=(Math.random()-.5)*.4;
-    this.size=Math.random()*1.8+.4;
-    this.baseOpacity=Math.random()*.45+.06;
-    this.opacity=this.baseOpacity;
-    this.color=Math.random()>.72?'0,245,196':'123,94,167';
-    this.pulse=Math.random()*Math.PI*2;
-    this.pulseSpeed=.01+Math.random()*.02;
-  }
-  update(){
-    this.pulse+=this.pulseSpeed;
-    this.opacity=this.baseOpacity+Math.sin(this.pulse)*.08;
-    // mouse repel
-    if(!isTouch){
-      const dx=this.x-mx,dy=this.y-my,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<160){const f=(160-d)/160*1.2;this.vx+=dx/d*f*.06;this.vy+=dy/d*f*.06;}
-    }
-    // dampen
-    this.vx*=.965;this.vy*=.965;
-    this.x+=this.vx;this.y+=this.vy;
-    if(this.x<-20||this.x>W+20||this.y<-20||this.y>H+20)this.reset(false);
-  }
-  draw(){
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${this.color},${this.opacity})`;
-    ctx.fill();
-  }
-}
+// ─── How it works scroll animation ───────
+(function() {
+  const steps = document.querySelectorAll('.how-step');
+  const panels = document.querySelectorAll('.vis-panel');
 
-// --- Floating rings (large slow shapes reacting to mouse) ---
-class Ring{
-  constructor(){this.reset()}
-  reset(){
-    this.x=Math.random()*W;this.y=Math.random()*H;
-    this.r=Math.random()*80+30;
-    this.vx=(Math.random()-.5)*.15;this.vy=(Math.random()-.5)*.15;
-    this.opacity=Math.random()*.06+.02;
-    this.color=Math.random()>.5?'0,245,196':'123,94,167';
-    this.rotation=Math.random()*Math.PI*2;
-    this.rotSpeed=(Math.random()-.5)*.003;
-  }
-  update(){
-    if(!isTouch){
-      const dx=this.x-mx,dy=this.y-my,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<300){const f=(300-d)/300*.3;this.vx+=dx/d*f*.015;this.vy+=dy/d*f*.015;}
-    }
-    this.vx*=.985;this.vy*=.985;
-    this.x+=this.vx;this.y+=this.vy;
-    this.rotation+=this.rotSpeed;
-    if(this.x<-150||this.x>W+150||this.y<-150||this.y>H+150)this.reset();
-  }
-  draw(){
-    ctx.save();
-    ctx.translate(this.x,this.y);
-    ctx.rotate(this.rotation);
-    ctx.beginPath();
-    ctx.ellipse(0,0,this.r,this.r*.4,0,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(${this.color},${this.opacity})`;
-    ctx.lineWidth=1;
-    ctx.stroke();
-    // inner dot
-    ctx.beginPath();
-    ctx.arc(this.r*.95,0,1.5,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${this.color},${this.opacity*2})`;
-    ctx.fill();
-    ctx.restore();
-  }
-}
-
-// --- Mouse attraction lines (lines that reach toward cursor) ---
-class Tendril{
-  constructor(){this.reset()}
-  reset(){
-    this.x=Math.random()*W;this.y=Math.random()*H;
-    this.life=0;this.maxLife=Math.random()*120+60;
-    this.color=Math.random()>.5?'0,245,196':'123,94,167';
-  }
-  update(){
-    this.life++;
-    if(this.life>this.maxLife)this.reset();
-  }
-  draw(){
-    if(isTouch)return;
-    const dx=mx-this.x,dy=my-this.y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d>400)return;
-    const progress=this.life/this.maxLife;
-    const alpha=Math.sin(progress*Math.PI)*.04*(1-d/400);
-    if(alpha<=0)return;
-    ctx.beginPath();
-    ctx.moveTo(this.x,this.y);
-    // draw line partway toward mouse
-    const reach=progress*.4;
-    ctx.lineTo(this.x+dx*reach,this.y+dy*reach);
-    ctx.strokeStyle=`rgba(${this.color},${alpha})`;
-    ctx.lineWidth=.8;
-    ctx.stroke();
-  }
-}
-
-const pts=[];const rings=[];const tendrils=[];
-for(let i=0;i<150;i++)pts.push(new Particle(i));
-for(let i=0;i<12;i++)rings.push(new Ring());
-for(let i=0;i<30;i++){const t=new Tendril();t.life=Math.floor(Math.random()*t.maxLife);tendrils.push(t);}
-
-function drawConnections(){
-  const step=3; // check every 3rd particle for perf
-  for(let i=0;i<pts.length;i+=step){
-    for(let j=i+step;j<pts.length;j+=step){
-      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120){
-        const a=.055*(1-d/120);
-        ctx.beginPath();
-        ctx.strokeStyle=`rgba(0,245,196,${a})`;
-        ctx.lineWidth=.5;
-        ctx.moveTo(pts[i].x,pts[i].y);
-        ctx.lineTo(pts[j].x,pts[j].y);
-        ctx.stroke();
+  function setActive(stepNum) {
+    steps.forEach(s => s.classList.toggle('active', s.dataset.step === String(stepNum)));
+    panels.forEach(p => {
+      const id = parseInt(p.id.replace('vis-',''));
+      if (id === stepNum) {
+        p.classList.remove('inactive');
+        // Small delay to trigger CSS transition
+        requestAnimationFrame(() => p.classList.add('active'));
+      } else if (p.classList.contains('active')) {
+        p.classList.remove('active');
+        p.classList.add('inactive');
+        setTimeout(() => p.classList.remove('inactive'), 600);
       }
-    }
+    });
   }
-}
 
-// Mouse glow
-function drawMouseGlow(){
-  if(isTouch)return;
-  const g=ctx.createRadialGradient(mx,my,0,mx,my,180);
-  g.addColorStop(0,'rgba(0,245,196,0.04)');
-  g.addColorStop(1,'rgba(0,245,196,0)');
-  ctx.fillStyle=g;
-  ctx.fillRect(0,0,W,H);
-}
-
-let frame=0;
-(function animate(){
-  frame++;
-  ctx.clearRect(0,0,W,H);
-  drawMouseGlow();
-  rings.forEach(r=>{r.update();r.draw()});
-  tendrils.forEach(t=>{t.update();t.draw()});
-  drawConnections();
-  pts.forEach(p=>{p.update();p.draw()});
-  requestAnimationFrame(animate);
-})();
-
-// REVEAL
-const io=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*70)})},{threshold:0.08});
-document.querySelectorAll('.reveal').forEach(r=>io.observe(r));
-
-// COUNT UP
-function countUp(){document.querySelectorAll('.count-up').forEach(el=>{const t=+el.dataset.target;let c=0;const s=t/60;const tm=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(tm)}el.textContent=Math.floor(c)},16)})}
-new IntersectionObserver(es=>{if(es[0].isIntersecting)countUp()},{threshold:0.5}).observe(document.querySelector('.hero'));
-
-// NAV
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').style.background=scrollY>50?'rgba(6,6,9,0.92)':'rgba(6,6,9,0.6)';
-},{passive:true});
-
-// PARALLAX
-window.addEventListener('scroll',()=>{
-  const sy=scrollY;
-  const ht=document.querySelector('.hero-title');
-  const hs=document.querySelector('.hero-sub');
-  if(ht)ht.style.transform=`translateY(${sy*.2}px)`;
-  if(hs)hs.style.transform=`translateY(${sy*.12}px)`;
-},{passive:true});
-
-// MOBILE MENU
-function toggleMenu(){document.getElementById('mobile-nav').classList.toggle('open')}
-
-// GLITCH
-(function(){
-  const logo=document.getElementById('nav-logo');
-  if(!logo)return;
-  function go(){logo.classList.add('glitching');setTimeout(()=>logo.classList.remove('glitching'),400);setTimeout(go,Math.random()*5000+3000)}
-  setTimeout(go,2500);
-})();
-
-// FAQ
-function toggleFaq(btn){
-  const item=btn.closest('.faq-item'),open=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!open)item.classList.add('open');
-}
-
-// VIDEO — rickroll 😂
-function openVideo(){
-  document.getElementById('vframe').src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0';
-  document.getElementById('vmodal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeVideo(){
-  document.getElementById('vframe').src='';
-  document.getElementById('vmodal').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// POPUP — show after 30s, once per session
-function closePopup(){
-  document.getElementById('popup-ov').classList.remove('show');
-  sessionStorage.setItem('popup_shown','1');
-}
-if(!sessionStorage.getItem('popup_shown')){
-  setTimeout(()=>{
-    document.getElementById('popup-ov').classList.add('show');
-  },30000);
-}
-
-// CAPTURE FORM
-function submitCapture(){
-  const name=document.getElementById('cap-name').value.trim();
-  const phone=document.getElementById('cap-phone').value.trim();
-  if(!phone){document.getElementById('cap-phone').style.borderColor='rgba(255,77,109,0.6)';return;}
-  const msg=encodeURIComponent(`Заявка с сайта\nИмя: ${name||'не указано'}\nТелефон: ${phone}`);
-  window.open(`https://wa.me/77071115354?text=${msg}`,'_blank');
-  document.getElementById('cap-name').value='';
-  document.getElementById('cap-phone').value='';
-}
-
-// LANG SWITCHER — full rewrite
-const T={
-  ru:{
-    heroTitle1:'Управляй',heroTitle2:'бизнесом',
-    heroSub:'AD Pulse — платформа для производственных компаний. WhatsApp CRM, склад, аналитика и 10+ интеграций в одном окне.',
-    heroCta:'Получить демо →',heroWatch:'Смотреть демо',
-    stat0:'% uptime',stat1:'мин запуск',stat2:'интеграций',
-    navFeatures:'Возможности',navHow:'Как работает',navInt:'Интеграции',navFor:'Для кого',navFaq:'FAQ',navContact:'Контакт',navCta:'Демо',
-    sLabelFeatures:'Возможности',sTitleFeatures:'Всё что нужно<br>для роста',sDescFeatures:'Единая платформа для производственных и торговых компаний. Никаких лишних инструментов.',
-    sLabelHow:'Как работает',sTitleHow:'Запуск за<br><span style="color:var(--accent)">3 шага</span>',
-    step1t:'Регистрация компании',step1d:'Создай аккаунт, добавь реквизиты и пригласи команду. Занимает 3 минуты.',
-    step2t:'Подключи WhatsApp',step2d:'Сканируй QR-код через Green API и получай заявки прямо в систему.',
-    step3t:'Начни работать',step3d:'Загрузи каталог, настрой воронку и обрабатывай заказы в едином дашборде.',
-    demoLabel:'Демо',demoDesc:'Посмотри как работает платформа — 3-минутный тур без регистрации.',demoBtn:'Смотреть демо',
-    sLabelFor:'Для кого',sTitleFor:'Создан для<br><span style="color:var(--accent)">производственников</span>',sDescFor:'AD Pulse понимает специфику реального сектора — сезонность, партии, сложные цепочки поставок.',
-    sLabelInt:'Интеграции',sTitleInt:'Подключается<br>ко всему',
-    sLabelBA:'До и после',sTitleBA:'Как было раньше<br><span style="color:var(--accent)">и как стало</span>',
-    sLabelFaq:'FAQ',sTitleFaq:'Частые вопросы',
-    ctaTag:'Готовы начать?',ctaTitle:'Запусти AD Pulse<br>сегодня',ctaDesc:'Оставь заявку и мы свяжемся в течение 1 часа. Покажем живое демо на твоих данных. Без обязательств.',
-    ctaWa:'Написать в WhatsApp →',ctaEmail:'Email нам',
-    capName:'Ваше имя',capPhone:'+7 777 000 00 00',capBtn:'Перезвоните мне →',capNote:'Оставь номер — свяжемся в течение 1 часа в рабочее время',
-    waBtn:'Написать нам',
-    popupTitle:'Остались вопросы?',popupDesc:'Напишите нам в WhatsApp — ответим за 5 минут и покажем живое демо.',popupWa:'Написать в WhatsApp',popupSkip:'Нет, спасибо',
-    ftLogo:'AD Pulse · Altai Dynamics',
-  },
-  kz:{
-    heroTitle1:'Бизнесіңді',heroTitle2:'басқар',
-    heroSub:'AD Pulse — өндірістік компаниялар үшін платформа. WhatsApp CRM, қойма, аналитика және 10+ интеграция.',
-    heroCta:'Демо алу →',heroWatch:'Демо көру',
-    stat0:'% жұмыс уақыты',stat1:'мин іске қосу',stat2:'интеграция',
-    navFeatures:'Мүмкіндіктер',navHow:'Қалай жұмыс істейді',navInt:'Интеграциялар',navFor:'Кімге арналған',navFaq:'FAQ',navContact:'Байланыс',navCta:'Демо',
-    sLabelFeatures:'Мүмкіндіктер',sTitleFeatures:'Өсу үшін<br>барлығы бар',sDescFeatures:'Өндірістік және сауда компаниялары үшін бірыңғай платформа.',
-    sLabelHow:'Қалай жұмыс істейді',sTitleHow:'<span style="color:var(--accent)">3 қадамда</span><br>іске қосу',
-    step1t:'Компанияны тіркеу',step1d:'Аккаунт жасап, компания деректерін қосыңыз. 3 минут қажет.',
-    step2t:'WhatsApp-ты қосу',step2d:'QR-кодты сканерлеп, өтінімдерді жүйеге тікелей алыңыз.',
-    step3t:'Жұмысты бастау',step3d:'Каталогты жүктеп, воронканы баптаңыз және тапсырыстарды басқарыңыз.',
-    demoLabel:'Демо',demoDesc:'Платформаның жұмысын қараңыз — тіркеусіз 3 минуттық тур.',demoBtn:'Демо көру',
-    sLabelFor:'Кімге арналған',sTitleFor:'Өндірістік<br><span style="color:var(--accent)">кәсіпкерлер үшін</span>',sDescFor:'AD Pulse нақты сектордың ерекшеліктерін түсінеді.',
-    sLabelInt:'Интеграциялар',sTitleInt:'Барлығымен<br>байланысады',
-    sLabelBA:'Бұрын және кейін',sTitleBA:'Бұрын қалай болды<br><span style="color:var(--accent)">және қалай болды</span>',
-    sLabelFaq:'FAQ',sTitleFaq:'Жиі қойылатын сұрақтар',
-    ctaTag:'Бастауға дайынсыз ба?',ctaTitle:'AD Pulse-ті бүгін<br>іске қосыңыз',ctaDesc:'Өтінім қалдырыңыз, 1 сағат ішінде хабарласамыз. Деректеріңізде тікелей демо көрсетеміз.',
-    ctaWa:'WhatsApp-та жазу →',ctaEmail:'Email жіберу',
-    capName:'Сіздің атыңыз',capPhone:'+7 777 000 00 00',capBtn:'Маған қоңырау шалыңыз →',capNote:'Нөмірді қалдырыңыз — жұмыс уақытында 1 сағат ішінде хабарласамыз',
-    waBtn:'Бізге жазу',
-    popupTitle:'Сұрақтарыңыз бар ма?',popupDesc:'WhatsApp-та жазыңыз — 5 минутта жауап береміз.',popupWa:'WhatsApp-та жазу',popupSkip:'Жоқ, рахмет',
-    ftLogo:'AD Pulse · Altai Dynamics',
-  }
-};
-
-let currentLang='ru';
-function setLang(lang){
-  currentLang=lang;
-  const t=T[lang];
-  const html=document.getElementById('html-root');
-
-  // Font class
-  html.classList.toggle('lang-kz', lang==='kz');
-
-  // Lang buttons
-  document.getElementById('btn-ru').classList.toggle('active', lang==='ru');
-  document.getElementById('btn-kz').classList.toggle('active', lang==='kz');
-
-  // Hero title lines
-  const l1=document.querySelector('.hero-title .l1 span');
-  const l3=document.getElementById('typed-target');
-  if(l1)l1.textContent=t.heroTitle1;
-  // line 2 is set by typed effect — update words array
-  if(l3)l3.textContent=''; // reset typed
-
-  // Hero sub
-  const sub=document.querySelector('.hero-sub');
-  if(sub)sub.textContent=t.heroSub;
-
-  // Hero CTA
-  const cta=document.querySelector('.hero-actions .btn-p');
-  if(cta)cta.textContent=t.heroCta;
-
-  // Hero stats labels
-  const statLabels=document.querySelectorAll('.hero-stat-l');
-  if(statLabels[0])statLabels[0].textContent=t.stat0;
-  if(statLabels[1])statLabels[1].textContent=t.stat1;
-  if(statLabels[2])statLabels[2].textContent=t.stat2;
-
-  // Nav links
-  const navLinks=document.querySelectorAll('.nav-links a');
-  if(navLinks[0])navLinks[0].textContent=t.navFeatures;
-  if(navLinks[1])navLinks[1].textContent=t.navHow;
-  if(navLinks[2])navLinks[2].textContent=t.navInt;
-  if(navLinks[3])navLinks[3].textContent=t.navFor;
-  if(navLinks[4])navLinks[4].textContent=t.navFaq;
-  if(navLinks[5])navLinks[5].textContent=t.navContact;
-  const navCta=document.getElementById('nav-cta-btn');
-  if(navCta)navCta.textContent=t.navCta;
-
-  // WA float
-  const waText=document.querySelector('.wa-float-text');
-  if(waText)waText.textContent=t.waBtn;
-
-  // CTA section
-  const ctaTag=document.querySelector('.cta-sec .hero-badge-dot')?.parentElement;
-  if(ctaTag)ctaTag.childNodes[ctaTag.childNodes.length-1].textContent=t.ctaTag;
-  const ctaTitle=document.querySelector('.cta-sec .s-title');
-  if(ctaTitle)ctaTitle.innerHTML=t.ctaTitle;
-  const ctaDesc=document.querySelector('.cta-sec .s-desc');
-  if(ctaDesc)ctaDesc.textContent=t.ctaDesc;
-  const ctaWaBtn=document.querySelector('.cta-sec .btn-p');
-  if(ctaWaBtn)ctaWaBtn.textContent=t.ctaWa;
-  const ctaEmailBtn=document.querySelector('.cta-sec .btn-g');
-  if(ctaEmailBtn)ctaEmailBtn.textContent=t.ctaEmail;
-
-  // Capture form
-  const capName=document.getElementById('cap-name');
-  const capPhone=document.getElementById('cap-phone');
-  const capBtn=document.querySelector('.cap-btn');
-  const capNote=document.querySelector('.cap-note');
-  if(capName)capName.placeholder=t.capName;
-  if(capPhone)capPhone.placeholder=t.capPhone;
-  if(capBtn)capBtn.textContent=t.capBtn;
-  if(capNote)capNote.textContent=t.capNote;
-
-  // Popup
-  const pt=document.getElementById('popup-title');
-  const pd=document.getElementById('popup-desc');
-  const ps=document.getElementById('popup-skip');
-  const pw=document.querySelector('.popup-wa');
-  if(pt)pt.textContent=t.popupTitle;
-  if(pd)pd.textContent=t.popupDesc;
-  if(ps)ps.textContent=t.popupSkip;
-  if(pw)pw.childNodes[pw.childNodes.length-1].textContent=' '+t.popupWa;
-
-  // Footer logo
-  const ftLogo=document.querySelector('.ft-logo');
-  if(ftLogo)ftLogo.textContent=t.ftLogo;
-
-  // Restart typed with correct words
-  startTyped(lang);
-}
-
-// TYPED — separate function so it can restart on lang change
-let typedTimer=null;
-function startTyped(lang){
-  const el=document.getElementById('typed-target');
-  if(!el)return;
-  if(typedTimer)clearTimeout(typedTimer);
-  el.textContent='';
-  const words=lang==='kz'
-    ? ['дұрыс','тезірек','оңайырақ','нақтырақ']
-    : ['умнее','быстрее','точнее','проще'];
-  let wi=0,ci=0,del=false;
-  function t(){
-    const w=words[wi];
-    if(!del){el.textContent=w.slice(0,++ci);if(ci===w.length){del=true;typedTimer=setTimeout(t,1800);return}}
-    else{el.textContent=w.slice(0,--ci);if(ci===0){del=false;wi=(wi+1)%words.length;typedTimer=setTimeout(t,350);return}}
-    typedTimer=setTimeout(t,del?55:105);
-  }
-  typedTimer=setTimeout(t,400);
-}
-startTyped('ru');
-
-// PHONE BARS
-(function(){
-  const bars=document.getElementById('bars');
-  if(!bars)return;
-  const vals=[30,55,40,70,85,60,95];
-  vals.forEach((v,i)=>{
-    const b=document.createElement('div');
-    b.className='bar'+(v===95?' hi':'');
-    b.style.height='0px';
-    bars.appendChild(b);
-    setTimeout(()=>{b.style.height=v*0.36+'px'},300+i*80);
+  // Use IntersectionObserver for step activation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setActive(parseInt(entry.target.dataset.step));
+      }
+    });
+  }, {
+    rootMargin: '-30% 0px -30% 0px',
+    threshold: 0
   });
+
+  steps.forEach(step => observer.observe(step));
 })();
 
-// LIVE PHONE ANIMATION
-(function(){
-  const msgs=[
-    'Нужен цемент М400, 200 мешков...',
-    'Здравствуйте, есть арматура 12мм?',
-    'Сколько стоит доставка до Алматы?',
-    'Можно счёт на 500 блоков D400?',
-    'Когда будет поставка следующая?'
-  ];
-  let i=0;
-  setInterval(()=>{
-    i=(i+1)%msgs.length;
-    const el=document.getElementById('wa-msg');
-    const te=document.getElementById('wa-time');
-    const nb=document.getElementById('new-badge');
-    const notif=document.getElementById('wa-notify');
-    if(el){
-      notif.style.opacity='0';
-      setTimeout(()=>{
-        el.textContent=msgs[i];
-        te.textContent='только что';
-        notif.style.opacity='1';
-        notif.style.transition='opacity 0.5s';
-        if(nb)nb.textContent=(Math.floor(Math.random()*5)+1)+' новых';
-      },500);
+// ─── Exit intent popup ────────────────────
+let popupShown = false;
+function showPopup() {
+  if (popupShown || sessionStorage.getItem('adp-popup-closed')) return;
+  popupShown = true;
+  document.getElementById('exit-popup').classList.add('show');
+}
+function closePopup() {
+  document.getElementById('exit-popup').classList.remove('show');
+  sessionStorage.setItem('adp-popup-closed', '1');
+}
+
+// Desktop: mouseleave intent
+document.addEventListener('mouseleave', e => {
+  if (e.clientY < 10) showPopup();
+});
+
+// Mobile: 60s on page
+setTimeout(showPopup, 60000);
+
+// Close on overlay click
+document.getElementById('exit-popup').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closePopup();
+});
+
+// ─── Smooth scroll for anchor links ───────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  },3500);
-})();
+  });
+});
+
+// ─── fadeIn keyframe polyfill ─────────────
+const style = document.createElement('style');
+style.textContent = '@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}';
+document.head.appendChild(style);
 </script>
 </body>
 </html>
