@@ -1,279 +1,102 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Политика конфиденциальности — Altai Dynamics</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/svg+xml" href="logo.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Политика конфиденциальности — AD Pulse</title>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-button{background:none;border:none;padding:0;font:inherit;color:inherit}
-:root{--c1:#05050a;--c2:#0c1018;--accent:#00f5c4;--accent2:#7b5ea7;--text:#eeeef5;--muted:#5a6070;--border:rgba(255,255,255,0.06)}
-html{scroll-behavior:smooth}
-body{background:var(--c1);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.7}
-
-.noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.25;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
-.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.007) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.007) 1px,transparent 1px);background-size:80px 80px}
-.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(120px)}
-.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,245,196,0.05),transparent 70%);top:-200px;right:-150px}
-.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(123,94,167,0.06),transparent 70%);bottom:10%;left:-150px}
-
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 4rem;backdrop-filter:blur(28px);border-bottom:1px solid var(--border);background:rgba(5,5,10,0.7)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:0.1em;color:var(--accent);text-decoration:none}
-.nav-logo span{color:rgba(255,255,255,0.3)}
-.nav-back{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s}
-.nav-back:hover{color:var(--accent)}
-.nav-back svg{transition:transform 0.2s}
-.nav-back:hover svg{transform:translateX(-3px)}
-
-.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:8rem 2rem 6rem}
-
-/* HERO */
-.page-hero{margin-bottom:4rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
-.page-eyebrow{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;opacity:0.8}
-.page-eyebrow::before{content:'// '}
-.page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:-0.03em;margin-bottom:1rem}
-.page-date{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.1em}
-
-/* CONTENT */
-.section{margin-bottom:3rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
-.section:last-of-type{border-bottom:none}
-.section-num{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:0.6rem;opacity:0.7}
-.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:-0.02em;margin-bottom:1rem;color:var(--text)}
-.section-body{color:var(--muted);font-size:0.925rem;line-height:1.85}
-.section-body p{margin-bottom:0.9rem}
-.section-body p:last-child{margin-bottom:0}
-.section-body ul{list-style:none;margin:0.75rem 0;display:flex;flex-direction:column;gap:0.55rem}
-.section-body ul li{display:flex;align-items:flex-start;gap:0.75rem;color:var(--muted)}
-.section-body ul li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:0.55rem;opacity:0.7}
-.section-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,245,196,0.2);transition:border-color 0.2s}
-.section-body a:hover{border-color:var(--accent)}
-.highlight{background:rgba(0,245,196,0.04);border:1px solid rgba(0,245,196,0.12);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:2px solid var(--accent)}
-.highlight p{color:var(--text) !important;font-size:0.875rem !important}
-
-/* CONTACT BLOCK */
-.contact-block{background:var(--c2);border:1px solid var(--border);padding:2rem;margin-top:4rem}
-.contact-block-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:1.25rem;color:var(--text);letter-spacing:-0.01em}
-.contact-rows{display:flex;flex-direction:column;gap:0.75rem}
-.contact-row{display:flex;align-items:flex-start;gap:1rem;font-size:0.875rem}
-.contact-label{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;min-width:80px;padding-top:0.15rem;opacity:0.8}
-.contact-val{color:var(--muted);line-height:1.6}
-.contact-val a{color:var(--accent);text-decoration:none;transition:opacity 0.2s}
-.contact-val a:hover{opacity:0.75}
-
-/* FOOTER */
-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:4rem}
-.ft-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--accent)}
-.ft-links{display:flex;gap:1.5rem;list-style:none}
-.ft-links a{color:var(--muted);font-family:'Space Mono',monospace;font-size:0.65rem;text-decoration:none;letter-spacing:0.1em;transition:color 0.2s}
-.ft-links a:hover{color:var(--text)}
-.ft-copy{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--muted);opacity:0.5}
-.hub-wrap{display:flex;align-items:center;gap:0.6rem}
-.hub-lbl{font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;opacity:0.5}
-.hub-img{height:20px;opacity:0.5;filter:brightness(0) invert(1)}
-
-@media(max-width:700px){
-  nav{padding:1rem 1.5rem}
-  .page{padding:7rem 1.5rem 4rem}
-  footer{padding:1.5rem;flex-direction:column;align-items:flex-start;gap:1.25rem}
-}
+:root{--bg:#05050a;--surface:#0f0f13;--border:#1a1a2e;--accent:#00f5c4;--text:#ededed;--muted:#888}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.7}
+a{color:var(--accent)}
+.nav{padding:20px 0;border-bottom:1px solid var(--border);margin-bottom:60px}
+.nav-inner{max-width:760px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem}
+.back{font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.back:hover{color:var(--text)}
+.content{max-width:760px;margin:0 auto;padding:0 24px 80px}
+h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:700;margin-bottom:8px}
+.updated{font-size:.85rem;color:var(--muted);margin-bottom:48px}
+h2{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin:36px 0 12px;color:var(--text)}
+p{color:var(--muted);margin-bottom:14px;font-size:.95rem}
+ul{color:var(--muted);padding-left:20px;margin-bottom:14px;font-size:.95rem}
+li{margin-bottom:6px}
+.contact-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:40px}
+.contact-box p{margin-bottom:6px}
 </style>
 </head>
 <body>
-<div class="noise"></div>
-<div class="grid-bg"></div>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-
-<nav>
-  <a href="index.html" class="nav-logo">AD<span>Pulse</span></a>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    На главную
-  </a>
-</nav>
-
-<div class="page">
-
-  <div class="page-hero">
-    <div class="page-eyebrow">Правовой документ</div>
-    <h1 class="page-title">Политика<br>конфиденциальности</h1>
-    <div class="page-date">Дата вступления в силу: 05 июня 2026 года · Версия 1.0</div>
+<div class="nav">
+  <div class="nav-inner">
+    <span class="logo">AD Pulse</span>
+    <a href="/" class="back">← На главную</a>
   </div>
+</div>
 
-  <div class="section">
-    <div class="section-num">01</div>
-    <div class="section-title">Общие положения</div>
-    <div class="section-body">
-      <p>Товарищество с ограниченной ответственностью «Altai Dynamics» (БИН: 260340030272, далее — «Компания») уважает право пользователей на конфиденциальность и принимает необходимые меры для защиты персональных данных в соответствии с законодательством Республики Казахстан.</p>
-      <p>Настоящая Политика определяет порядок сбора, обработки, хранения и защиты персональных данных пользователей сайта и платформы AD Pulse.</p>
-      <div class="highlight"><p>Используя сайт или платформу AD Pulse, пользователь подтверждает, что ознакомлен с настоящей Политикой и выражает согласие с её условиями.</p></div>
-    </div>
-  </div>
+<div class="content">
+  <h1>Политика конфиденциальности</h1>
+  <p class="updated">Последнее обновление: 9 июня 2026 г.</p>
 
-  <div class="section">
-    <div class="section-num">02</div>
-    <div class="section-title">Какие данные мы собираем</div>
-    <div class="section-body">
-      <p>Компания может обрабатывать следующие категории персональных данных:</p>
-      <ul>
-        <li>Имя и фамилия пользователя;</li>
-        <li>Номер телефона;</li>
-        <li>Адрес электронной почты;</li>
-        <li>Данные, переданные через формы обратной связи или заявки на демонстрацию;</li>
-        <li>Сообщения и переписка, переданные через мессенджеры (WhatsApp, Telegram) в рамках использования платформы AD Pulse;</li>
-        <li>Технические данные устройства и браузера (тип, версия, разрешение экрана);</li>
-        <li>IP-адрес;</li>
-        <li>Cookie-файлы и данные сессии.</li>
-      </ul>
-    </div>
-  </div>
+  <h2>1. Кто мы</h2>
+  <p>AD Pulse — сервис автоматического учёта материалов для производственных компаний. Разработан и поддерживается ТОО «Altai Dynamics» (Казахстан).</p>
 
-  <div class="section">
-    <div class="section-num">03</div>
-    <div class="section-title">Цели обработки данных</div>
-    <div class="section-body">
-      <p>Персональные данные обрабатываются исключительно в следующих целях:</p>
-      <ul>
-        <li>Предоставление услуг платформы AD Pulse и проведение консультаций;</li>
-        <li>Обработка обращений, заявок и запросов пользователей;</li>
-        <li>Обеспечение работы CRM-функционала, включая обработку входящих сообщений через мессенджеры;</li>
-        <li>Связь с клиентами и уведомление об изменениях в сервисе;</li>
-        <li>Улучшение качества работы сайта и платформы;</li>
-        <li>Выполнение требований законодательства Республики Казахстан.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">04</div>
-    <div class="section-title">WhatsApp и интеграции с мессенджерами</div>
-    <div class="section-body">
-      <p>Платформа AD Pulse предоставляет возможность интеграции с мессенджерами — в частности, с WhatsApp через сервис Wazzup и иные API-решения. При использовании данного функционала необходимо учитывать следующее:</p>
-      <ul>
-        <li>Сообщения, поступающие в подключённый WhatsApp-аккаунт клиента, обрабатываются и сохраняются в рамках платформы AD Pulse в соответствии с настройками аккаунта;</li>
-        <li>Компания выступает исключительно как технический посредник — данные переписки принадлежат клиенту и обрабатываются от его имени;</li>
-        <li>Компания не читает, не анализирует и не использует содержание переписки клиентов в маркетинговых или иных целях;</li>
-        <li>Передача данных через WhatsApp осуществляется в соответствии с условиями использования WhatsApp Business API и политикой Meta Platforms Inc.;</li>
-        <li>Клиент несёт ответственность за соблюдение требований законодательства при обработке персональных данных своих контрагентов через платформу.</li>
-      </ul>
-      <div class="highlight"><p>Подключение мессенджеров к платформе означает согласие клиента с условиями соответствующих API-провайдеров (Wazzup, Green API и др.).</p></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">05</div>
-    <div class="section-title">Передача данных третьим лицам</div>
-    <div class="section-body">
-      <p>Компания не продаёт и не передаёт персональные данные пользователей третьим лицам, за исключением следующих случаев:</p>
-      <ul>
-        <li>Случаи, прямо предусмотренные законодательством Республики Казахстан;</li>
-        <li>Передача данных API-партнёрам (Wazzup, Green API, Mobizon и др.) исключительно в объёме, необходимом для оказания услуг интеграции;</li>
-        <li>Передача данных по требованию уполномоченных государственных органов в установленном законом порядке.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">06</div>
-    <div class="section-title">Информационные и маркетинговые рассылки</div>
-    <div class="section-body">
-      <p>Компания вправе направлять пользователю уведомления о новых продуктах, услугах, специальных предложениях, обновлениях сервиса и иных информационных сообщениях.</p>
-      <p>Пользователь вправе отказаться от получения таких сообщений в любое время, направив запрос на адрес <a href="mailto:altai.dx@gmail.com">altai.dx@gmail.com</a> с темой письма «Отказ от уведомлений» либо сообщив об отказе через используемый канал связи.</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">07</div>
-    <div class="section-title">Защита данных</div>
-    <div class="section-body">
-      <p>Компания применяет организационные и технические меры для защиты персональных данных от несанкционированного доступа, изменения, раскрытия или уничтожения, включая:</p>
-      <ul>
-        <li>Шифрование данных (AES-256) при хранении и передаче;</li>
-        <li>Двухфакторную аутентификацию для доступа к платформе;</li>
-        <li>Ролевую модель доступа (RBAC);</li>
-        <li>Журналирование всех действий с данными (аудит-лог);</li>
-        <li>Хранение данных на серверах, расположенных в Республике Казахстан.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">08</div>
-    <div class="section-title">Использование файлов Cookie</div>
-    <div class="section-body">
-      <p>Сайт использует файлы Cookie для корректной работы сервисов, аналитики посещаемости и улучшения пользовательского опыта. Cookie не содержат персональных данных в явном виде.</p>
-      <p>Пользователь вправе отключить Cookie в настройках своего браузера. Это может повлиять на корректность работы отдельных функций сайта.</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">09</div>
-    <div class="section-title">Права пользователя</div>
-    <div class="section-body">
-      <p>В соответствии с законодательством Республики Казахстан пользователь вправе:</p>
-      <ul>
-        <li>Запросить информацию о составе и целях обработки своих персональных данных;</li>
-        <li>Потребовать исправления недостоверных данных;</li>
-        <li>Потребовать удаления персональных данных при наличии законных оснований;</li>
-        <li>Отозвать согласие на обработку персональных данных.</li>
-      </ul>
-      <p>Для реализации указанных прав следует направить обращение на адрес <a href="mailto:altai.dx@gmail.com">altai.dx@gmail.com</a>.</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-num">10</div>
-    <div class="section-title">Изменение политики</div>
-    <div class="section-body">
-      <p>Компания оставляет за собой право вносить изменения в настоящую Политику. Актуальная версия всегда публикуется на данной странице с указанием даты последнего обновления. Продолжение использования сайта или платформы после внесения изменений означает согласие с обновлённой редакцией.</p>
-    </div>
-  </div>
-
-  <!-- CONTACT BLOCK -->
-  <div class="contact-block">
-    <div class="contact-block-title">Контактная информация</div>
-    <div class="contact-rows">
-      <div class="contact-row">
-        <div class="contact-label">Компания</div>
-        <div class="contact-val">ТОО «Altai Dynamics»</div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-label">БИН</div>
-        <div class="contact-val">260340030272</div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-label">Адрес</div>
-        <div class="contact-val">Казахстан, город Астана, район Есиль,<br>улица Керей, Жәнібек хандар, дом 9, кв. 221,<br>индекс 010000</div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-label">Телефон</div>
-        <div class="contact-val"><a href="tel:+77077246790">+7 707 724 67 90</a></div>
-      </div>
-      <div class="contact-row">
-        <div class="contact-label">Email</div>
-        <div class="contact-val"><a href="mailto:altai.dx@gmail.com">altai.dx@gmail.com</a></div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /page -->
-
-<footer>
-  <div class="ft-logo">AD Pulse · Altai Dynamics</div>
-  <ul class="ft-links">
-    <li><a href="index.html">Главная</a></li>
-    <li><a href="privacy.html">Политика</a></li>
+  <h2>2. Какие данные мы собираем</h2>
+  <ul>
+    <li><strong>Аккаунт:</strong> email, имя, должность, компания</li>
+    <li><strong>Производственные данные:</strong> материалы, транзакции, производственные планы — данные вашей компании</li>
+    <li><strong>WhatsApp-сообщения:</strong> входящие сообщения через Wazzup API для автоматического парсинга транзакций</li>
+    <li><strong>Технические данные:</strong> IP-адрес, браузер, логи ошибок</li>
   </ul>
-  <div class="ft-copy">© 2026 Altai Dynamics. Все права защищены.</div>
-  <div class="hub-wrap">
-    <div class="hub-lbl">Резидент</div>
-    <img src="https://cdn.astanahub.com/static/img_v2/logo.svg" alt="Astana Hub" class="hub-img">
-  </div>
-</footer>
 
+  <h2>3. Как мы используем данные</h2>
+  <ul>
+    <li>Предоставление функционала платформы (учёт, отчёты, планы)</li>
+    <li>AI-парсинг сообщений WhatsApp через OpenAI API (тексты сообщений передаются для распознавания)</li>
+    <li>Отправка Telegram-уведомлений по вашим настройкам</li>
+    <li>Отправка системных email (подтверждение, сброс пароля, приглашения)</li>
+    <li>Улучшение качества сервиса</li>
+  </ul>
+
+  <h2>4. Передача данных третьим сторонам</h2>
+  <p>Мы передаём данные только следующим сервисам, необходимым для работы платформы:</p>
+  <ul>
+    <li><strong>Supabase</strong> — база данных и аутентификация (EU регион)</li>
+    <li><strong>Vercel</strong> — хостинг приложения</li>
+    <li><strong>OpenAI</strong> — AI-парсинг текстов (только содержимое сообщений, без персональных данных)</li>
+    <li><strong>Wazzup</strong> — интеграция WhatsApp</li>
+    <li><strong>Resend</strong> — транзакционные email</li>
+  </ul>
+  <p>Мы не продаём и не передаём ваши данные третьим лицам в маркетинговых целях.</p>
+
+  <h2>5. Хранение данных</h2>
+  <p>Данные хранятся на серверах Supabase (Европейский союз). Период хранения — в течение срока действия аккаунта и 30 дней после его удаления.</p>
+
+  <h2>6. Ваши права</h2>
+  <ul>
+    <li>Запрос копии ваших данных</li>
+    <li>Исправление неточных данных</li>
+    <li>Удаление аккаунта и данных</li>
+    <li>Возражение против обработки</li>
+  </ul>
+  <p>Для реализации прав напишите на: <a href="mailto:uskembayev.zh@altaidynamics.kz">uskembayev.zh@altaidynamics.kz</a></p>
+
+  <h2>7. Безопасность</h2>
+  <p>Мы используем шифрование HTTPS, изоляцию данных по компаниям (мультитенантность), Row-Level Security в базе данных Supabase. Пароли не хранятся в открытом виде.</p>
+
+  <h2>8. Cookies</h2>
+  <p>Мы используем сессионные cookies для аутентификации (Supabase Auth). Маркетинговые или аналитические cookies не используются.</p>
+
+  <h2>9. Изменения политики</h2>
+  <p>При существенных изменениях мы уведомим вас по email. Актуальная версия всегда доступна на этой странице.</p>
+
+  <div class="contact-box">
+    <p><strong style="color:var(--text)">Контакты по вопросам конфиденциальности</strong></p>
+    <p>ТОО «Altai Dynamics»</p>
+    <p>Email: <a href="mailto:uskembayev.zh@altaidynamics.kz">uskembayev.zh@altaidynamics.kz</a></p>
+    <p>WhatsApp: <a href="https://wa.me/77071115354">+7 707 111 53 54</a></p>
+  </div>
+</div>
 </body>
 </html>
