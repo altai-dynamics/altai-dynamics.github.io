@@ -269,13 +269,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   .hero,.sec,.cta-sec{padding-left:20px;padding-right:20px}
   hr.dv{margin:0 20px}
   .tech-strip{padding:14px 20px;flex-wrap:wrap;gap:12px}
-  #story-scroll-zone{height:auto!important}
-  .story-sticky-wrap{position:static;height:auto;padding:0 20px 40px}
-  .story-grid{grid-template-columns:1fr;gap:0;padding:0}
-  .story-vis{display:none}
-  .story-progress{display:none}
-  .mob-vis-inline{display:none}
-  .s-step.active .mob-vis-inline{display:block}
+  #story-scroll-zone{height:auto!important;display:block}
+  .story-sticky-wrap{position:static!important;height:auto!important;padding:0 20px 40px;display:block}
+  .story-grid{grid-template-columns:1fr;gap:0;padding:0;display:block}
+  .story-vis{display:none!important}
+  .story-progress{display:none!important}
+  /* On mobile all steps always open */
+  .s-step .s-desc{max-height:none!important;opacity:1!important}
+  .s-step .mob-vis-inline{display:block!important}
+  .s-step::before{display:none}
   .feat-grid{grid-template-columns:1fr 1fr}
   .fw-grid{grid-template-columns:1fr 1fr}
   .pricing-grid{grid-template-columns:1fr}
@@ -807,11 +809,12 @@ function setLang(l){
   });
 }
 
-// ===== STORY SCROLL PINNED =====
+// ===== STORY =====
 const steps=document.querySelectorAll('.s-step');
 const visuals=document.querySelectorAll('.vis-card');
 const dots=document.querySelectorAll('.sp-dot');
 let cur=0;
+const isMobile=()=>window.innerWidth<=900;
 
 function goStep(i){
   cur=i;
@@ -820,15 +823,14 @@ function goStep(i){
   dots.forEach((d,j)=>d.classList.toggle('active',j===i));
 }
 
-// Click on steps
 steps.forEach((s,i)=>s.addEventListener('click',()=>goStep(i)));
 
-// Scroll drive — each step gets 1 viewport of scroll
+// Desktop only: scroll-driven pinning
 const scrollZone=document.getElementById('story-scroll-zone');
 window.addEventListener('scroll',()=>{
-  if(!scrollZone)return;
+  if(!scrollZone||isMobile())return;
   const r=scrollZone.getBoundingClientRect();
-  const zoneH=scrollZone.offsetHeight - window.innerHeight;
+  const zoneH=scrollZone.offsetHeight-window.innerHeight;
   const scrolled=Math.max(0,-r.top);
   const progress=Math.min(1,scrolled/zoneH);
   const s=Math.min(steps.length-1,Math.floor(progress*steps.length));
