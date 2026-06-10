@@ -7,7 +7,7 @@
 <meta name="description" content="AD Pulse — автоматический учёт материалов через WhatsApp для заводов, цехов и складов Казахстана.">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -104,7 +104,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;ali
 hr.dv{border:none;border-top:1px solid var(--border);margin:0 48px}
 
 /* STORY */
-.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.story-outer{position:relative}
+.story-sticky-wrap{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;width:100%;max-width:1280px;margin:0 auto;padding:0 48px}
 .story-steps{}
 .s-step{padding:28px 0;border-bottom:1px solid var(--border);cursor:pointer;position:relative;transition:all 0.3s}
 .s-step::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);transform-origin:top}
@@ -117,8 +119,12 @@ hr.dv{border:none;border-top:1px solid var(--border);margin:0 48px}
 .s-step.active .s-title{color:var(--text)}
 .s-desc{font-size:0.82rem;line-height:1.65;color:var(--muted);max-height:0;overflow:hidden;transition:max-height 0.4s ease,opacity 0.3s;opacity:0}
 .s-step.active .s-desc{max-height:120px;opacity:1}
+/* progress bar */
+.story-progress{position:absolute;left:48px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px}
+.sp-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all 0.4s;cursor:pointer}
+.sp-dot.active{background:var(--accent);transform:scale(1.4)}
 
-.story-vis{position:sticky;top:96px}
+.story-vis{position:relative}
 .vis-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;display:none;animation:cIn 0.4s cubic-bezier(0.16,1,0.3,1)}
 .vis-card.active{display:block}
 @keyframes cIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -234,6 +240,23 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.7s,transform 0.7s}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
+/* KAZAKH FONT — Noto Sans handles Kazakh chars perfectly */
+.lang-kz .hero-title,
+.lang-kz .sec-title,
+.lang-kz .cta-title,
+.lang-kz .feat-title,
+.lang-kz .fw-title,
+.lang-kz .s-title,
+.lang-kz .plan-name,
+.lang-kz .exit-title,
+.lang-kz .btn-p,
+.lang-kz .btn-s,
+.lang-kz .nav-cta{
+  font-family:'Noto Sans',sans-serif;
+  font-weight:900;
+  letter-spacing:-0.02em;
+}
+
 /* RESPONSIVE */
 @media(max-width:1100px){
   .hero{grid-template-columns:1fr;min-height:auto;padding-top:100px}
@@ -245,9 +268,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   .burger{display:flex}
   .hero,.sec,.cta-sec{padding-left:20px;padding-right:20px}
   hr.dv{margin:0 20px}
-  .tech-strip{padding:14px 20px}
-  .story-grid{grid-template-columns:1fr;gap:0}
+  .tech-strip{padding:14px 20px;flex-wrap:wrap;gap:12px}
+  #story-scroll-zone{height:auto!important}
+  .story-sticky-wrap{position:static;height:auto;padding:0 20px 40px}
+  .story-grid{grid-template-columns:1fr;gap:0;padding:0}
   .story-vis{display:none}
+  .story-progress{display:none}
   .mob-vis-inline{display:none}
   .s-step.active .mob-vis-inline{display:block}
   .feat-grid{grid-template-columns:1fr 1fr}
@@ -257,8 +283,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   .ft-top{flex-direction:column}
   .ft-bot{flex-direction:column;text-align:center}
   .hero-stats{width:100%}
+  /* Mobile font sizes */
+  .hero-title{font-size:2.4rem;line-height:1}
+  .sec-title{font-size:1.6rem}
+  .cta-title{font-size:1.6rem}
+  .hero-sub{font-size:0.9rem}
+  .hero-badge{font-size:0.5rem;letter-spacing:0.14em}
+  .cta-acts{flex-direction:column;align-items:stretch}
+  .cta-acts a{text-align:center;justify-content:center}
 }
 @media(max-width:600px){
+  .hero{padding:80px 20px 40px}
   .hero-stats{flex-direction:column}
   .h-stat{border-right:none;border-bottom:1px solid var(--border)}
   .h-stat:last-child{border-bottom:none}
@@ -266,6 +301,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   .tech-items{gap:18px}
   .wa-float span{display:none}
   .wa-float{padding:11px;border-radius:50%}
+  .pricing-grid{grid-template-columns:1fr}
+  .hero-title{font-size:2rem}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions a{text-align:center;justify-content:center}
 }
 </style>
 </head>
@@ -363,13 +402,22 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 </div>
 
 <!-- HOW -->
-<section class="sec" id="how">
-  <div class="sec-wrap">
+<section id="how" class="story-outer">
+  <div style="position:relative;z-index:1;padding:80px 48px 40px;max-width:1280px;margin:0 auto">
     <div class="eyebrow" data-i18n="how_ey">Процесс</div>
     <h2 class="sec-title reveal" data-i18n="how_t">Как это работает</h2>
-    <p class="sec-sub reveal" data-i18n="how_s">Четыре шага от сообщения до данных в системе</p>
-    <div class="story-grid">
-      <div class="story-steps" id="ssteps">
+    <p class="sec-sub reveal" style="margin-bottom:0" data-i18n="how_s">Четыре шага от сообщения до данных в системе</p>
+  </div>
+  <div style="height:400vh" id="story-scroll-zone">
+    <div class="story-sticky-wrap">
+      <div class="story-grid">
+        <div class="story-progress" id="story-dots">
+          <div class="sp-dot active" onclick="goStep(0)"></div>
+          <div class="sp-dot" onclick="goStep(1)"></div>
+          <div class="sp-dot" onclick="goStep(2)"></div>
+          <div class="sp-dot" onclick="goStep(3)"></div>
+        </div>
+        <div class="story-steps" id="ssteps">
         <div class="s-step active" data-step="0">
           <div class="s-step-hdr">
             <div class="s-num">01</div>
@@ -469,9 +517,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
             <div class="dash-v">2 350 кг</div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+        </div><!-- /story-steps -->
+      </div><!-- /story-grid -->
+    </div><!-- /story-sticky-wrap -->
+  </div><!-- /story-scroll-zone -->
 </section>
 
 <hr class="dv">
@@ -748,6 +797,7 @@ kz:{
 let lang='ru';
 function setLang(l){
   lang=l;
+  document.getElementById('html-root').classList.toggle('lang-kz', l==='kz');
   document.querySelectorAll('.lang-btn').forEach(b=>{
     b.classList.toggle('active',(l==='ru'&&b.textContent==='RU')||(l==='kz'&&b.textContent==='ҚЗ'));
   });
@@ -757,27 +807,32 @@ function setLang(l){
   });
 }
 
-// ===== STORY =====
+// ===== STORY SCROLL PINNED =====
 const steps=document.querySelectorAll('.s-step');
 const visuals=document.querySelectorAll('.vis-card');
-let cur=0,autoT=null;
-function go(i){
+const dots=document.querySelectorAll('.sp-dot');
+let cur=0;
+
+function goStep(i){
   cur=i;
   steps.forEach((s,j)=>s.classList.toggle('active',j===i));
   visuals.forEach((v,j)=>v.classList.toggle('active',j===i));
+  dots.forEach((d,j)=>d.classList.toggle('active',j===i));
 }
-steps.forEach((s,i)=>s.addEventListener('click',()=>{clearInterval(autoT);go(i);startAuto();}));
-function startAuto(){autoT=setInterval(()=>go((cur+1)%steps.length),6500);}
-startAuto();
 
-// Scroll drive
-const howSec=document.getElementById('how');
+// Click on steps
+steps.forEach((s,i)=>s.addEventListener('click',()=>goStep(i)));
+
+// Scroll drive — each step gets 1 viewport of scroll
+const scrollZone=document.getElementById('story-scroll-zone');
 window.addEventListener('scroll',()=>{
-  if(!howSec)return;
-  const r=howSec.getBoundingClientRect();
-  const p=Math.max(0,Math.min(1,(-r.top)/(r.height-window.innerHeight)));
-  const s=Math.min(steps.length-1,Math.floor(p*steps.length*1.3));
-  if(s!==cur){clearInterval(autoT);go(s);startAuto();}
+  if(!scrollZone)return;
+  const r=scrollZone.getBoundingClientRect();
+  const zoneH=scrollZone.offsetHeight - window.innerHeight;
+  const scrolled=Math.max(0,-r.top);
+  const progress=Math.min(1,scrolled/zoneH);
+  const s=Math.min(steps.length-1,Math.floor(progress*steps.length));
+  if(s!==cur)goStep(s);
 },{passive:true});
 
 // ===== REVEAL =====
