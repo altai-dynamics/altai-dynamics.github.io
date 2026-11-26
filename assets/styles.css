@@ -259,3 +259,13 @@ h2 { font-size: clamp(24px, 2.6vw, 32px); margin: 0 0 8px; }
   .cta-band { padding: 20px; }
   .cta-band .btn { width: 100%; }
 }
+
+/* Comparison table */
+.compare-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+.compare { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 640px; }
+.compare th, .compare td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+.compare th { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.compare td { color: var(--muted); }
+.compare td:first-child { color: var(--text); }
+.compare tr:last-child td { border-bottom: 0; }
+.compare td:not(:first-child) { text-align: center; width: 90px; }
