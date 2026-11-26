@@ -77,6 +77,19 @@
   var hasTranslation = document.cookie.indexOf("googtrans=") !== -1;
   if (hasTranslation || (savedLang && savedLang !== "ru")) {
     if (hasTranslation) ensureTranslateScript();
+    if (savedLang && savedLang !== "ru") {
+      // Если Google Translate не применился (блокировка, сеть), возвращаем
+      // селектор и сохранённый выбор на русский, чтобы не было «EN» с русским текстом.
+      setTimeout(function () {
+        var translated = document.documentElement.classList.contains("translated-ltr") ||
+          document.documentElement.classList.contains("translated-rtl");
+        if (!translated) {
+          try { localStorage.setItem("adpulse-lang", "ru"); } catch (e) {}
+          document.cookie = "googtrans=;path=/;max-age=0";
+          if (select) select.value = "ru";
+        }
+      }, 4000);
+    }
   }
 
   /* ── Cookie-баннер ────────────────────────────────────── */
